@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    РИАВС - Шаблонизатор писем
+{% endblock %}
+
+{% block content %}
+    <div id='content'>
+			<div id='select_templates'>
+
+			</div>
+
+			<div id='template_content'>
+				<div>
+					<div id='template'>
+
+					</div>
+					<div id='preview'>
+
+					</div>
+                    <input type='button' value='Предпросмотр письма'>
+                    <input type='button' value='Далее'>
+				</div>
+
+				<div>
+					<div>
+						<label>
+							Группы пользователей
+						</label>
+						<div>
+							<select multiple>
+
+							</select>
+						</div>
+					</div>
+
+                    <div>
+                        <label>
+							Пользователи
+						</label>
+						<div>
+							<select multiple>
+
+							</select>
+						</div>
+                    </div>
+
+                    <div id="datetime">
+                        <label>
+                            Выбор даты и времени отправки письма
+                        </label>
+                        <div id="date">
+
+                        </div>
+                        <div id="time">
+
+                        </div>
+                    </div>
+
+                    <div id="navigation">
+                        <input type='button' value='Назад'>
+                        <input type='button' value='Создать сообщение'>
+                    </div>
+				</div>
+			</div>
+
+
+		</div>
+{% endblock %}
