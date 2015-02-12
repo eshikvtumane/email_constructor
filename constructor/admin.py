@@ -12,9 +12,6 @@ class CompanyGroupInline(admin.StackedInline):
     model = CompanyGroup
 
 class LocationAdmin(admin.ModelAdmin):
-    inlines = [
-        CompanyInline,
-    ]
 
     fields = ["name"]
 
