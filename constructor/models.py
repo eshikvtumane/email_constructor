@@ -12,7 +12,6 @@ class Email(models.Model):
     title = models.TextField()
     text = models.TextField()
 
-    image = models.ImageField(upload_to='email_images')
     multimedia_link = models.URLField()
     footer = models.TextField()
 
@@ -28,20 +27,13 @@ class Template(models.Model):
 
 
 class Image(models.Model):
-     class Meta:
+    class Meta:
         db_table = 'Images'
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
 
-     image = models.ImageField(upload_to='email_images')
-
-class EmailToImage(models.Model):
-    class Meta:
-        db_table = 'EmailToImage'
-        verbose_name = 'Письмо к изображению'
-        verbose_name_plural = 'Письма к изображениям'
-    email = models.ForeignKey(Email)
-    image = models.ForeignKey(Image)
+    email = models.ForeignKey('Email')
+    picture = models.ImageField(upload_to='email_images')
 
 # компании по группам
 class CompanyGroup(models.Model):
