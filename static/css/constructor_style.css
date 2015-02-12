@@ -16,3 +16,11 @@
 .navigation{
     padding-top: 2ex;
 }
+
+.padding-elem{
+    padding-top: 2ex;
+}
+
+select[multiple]{
+    height: 30ex;
+}

@@ -5,62 +5,165 @@
     РИАВС - Шаблонизатор писем
 {% endblock %}
 
-{% block content %}
-    <div id='content'>
-			<div id='select_templates'>
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/constructor_style.css' %}">
+    <link rel="stylesheet" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
+ {% endblock %}
 
+{% block scripts %}
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <!-- datetimepicker -->
+    <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker.js' %}"></script>
+    <script src="{% static 'js/work_with_div.js' %}"></script>
+    <script src="{% static 'js/work_with_group.js' %}"></script>
+    <script src="{% static 'js/work_with_user.js' %}"></script>
+    <script src="{% static 'js/work_with_select.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div>
+			<div id='select_templates'>
+                <div>
+                    <a href="#">Шаблон 1</a>
+                </div>
+
+                <div>
+                    <a href="#">Шаблон 2</a>
+                </div>
+
+                <div>
+                    <a href="#">Шаблон 3</a>
+                </div>
+
+                <div>
+                    <a href="#">Шаблон 4</a>
+                </div>
 			</div>
 
-			<div id='template_content'>
-				<div>
-					<div id='template'>
+			<div class="container">
+				<div id="email" class="well well-lg">
+                    <div class="col-sm-6">
+                        <h3>Шаблон</h3>
+                        <div id='template'  class="col-sm-10">
+                            <div>
+                                <label>
+                                    Title
+                                </label>
+                                <input type="text" id="title_">
+                            </div>
 
-					</div>
-					<div id='preview'>
+                        </div>
+                    </div>
 
-					</div>
-                    <input type='button' value='Предпросмотр письма'>
-                    <input type='button' value='Далее'>
+                    <div class="col-sm-6">
+                        <h3>Предпросмотр</h3>
+                        <div id='preview' class="col-sm-10">
+
+					    </div>
+                    </div>
+
+                    <div class="navigation">
+                        <input type='button' value='Предпросмотр письма' class="btn btn-primary" id="btn_preview">
+                        <input type='button' value='Далее' class="btn btn-primary" id="btn_next">
+                    </div>
+
 				</div>
 
-				<div>
-					<div>
-						<label>
-							Группы пользователей
-						</label>
-						<div>
-							<select multiple>
+				<div id="setting" class="settings">
+                    <div>
+                        <div class="col-sm-12 well well-lg">
+                            <div class="col-sm-5">
+                                <label>
+                                    Группы пользователей
+                                </label>
+                                <select multiple="multiple" class="form-control" id="select_groups">
+                                    {% for group in groups %}
+                                        <option value="{{ group.id}}">{{ group.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="text-center padding-elem">
+                                    <input type="button" value="Добавить группы" id="add_group" class="btn btn-success">
+                                </div>
 
-							</select>
-						</div>
-					</div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <label>
+                                    Добавленные группы
+                                </label>
+
+                                <select multiple="multiple" class="form-control select-style" id="adding_groups">
+
+                                </select>
+
+                                <div class="text-center padding-elem">
+                                    <input type="button" value="Удалить группы" id="delete_group" class="btn btn-danger">
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 well well-lg">
+                            <div class="col-sm-6">
+                                <div>
+                                    <label>
+                                        Поиск пользователей
+                                    </label>
+
+                                    <input type="text" class="form-control" id="search_user" onkeyup="userSearch();">
+                                </div>
+                                <div>
+                                    <label>
+                                        Результаты поиска
+                                    </label>
+                                    <select multiple="multiple" class="form-control select-style" id="searching_users">
+
+                                    </select>
+
+                                </div>
+
+
+                                <input type="button" value="Добавить пользователей" id="add_users">
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label>
+                                    Пользователи
+                                </label>
+                                <div>
+                                    <select multiple="multiple" class="form-control" id="added_users">
+
+                                    </select>
+                                </div>
+                                <input type="button" value="Удалить пользователей" id="delete_users">
+                            </div>
+
+                        </div>
+
+                        <div>
+                            Местоположение пользователя
+                            <select>
+
+                            </select>
+                        </div>
+                    </div>
+					<!-- -------------------------------------------- -->
 
                     <div>
                         <label>
-							Пользователи
-						</label>
-						<div>
-							<select multiple>
-
-							</select>
-						</div>
-                    </div>
-
-                    <div id="datetime">
-                        <label>
                             Выбор даты и времени отправки письма
                         </label>
-                        <div id="date">
-
-                        </div>
-                        <div id="time">
-
+                        <div id="datetime">
+                            <input id="datetimepicker" type="text" >
                         </div>
                     </div>
 
+                    <!-- -------------------------------------------- -->
+
                     <div id="navigation">
-                        <input type='button' value='Назад'>
-                        <input type='button' value='Создать сообщение'>
+                        <input type='button' value='Назад' class="btn btn-primary" id="btn_back">
+                        <input type='button' value='Создать письмо' class="btn btn-primary">
                     </div>
 				</div>
 			</div>

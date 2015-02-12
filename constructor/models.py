@@ -10,7 +10,7 @@ class Email(models.Model):
 
     email_template = models.ForeignKey('Template')
     title = models.TextField()
-    text = models.Text()
+    text = models.TextField()
     image = models.ImageField(upload_to='email_images')
     multimedia_link = models.URLField()
 
