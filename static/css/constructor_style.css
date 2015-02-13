@@ -1,0 +1,18 @@
+.settings{
+    display: none;
+}
+
+
+#template{
+    height: 50ex;
+    border: 1px solid black
+}
+
+#preview{
+    height: 50ex;
+    border: 1px solid black
+}
+
+.navigation{
+    padding-top: 2ex;
+}
