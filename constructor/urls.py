@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 
 from views import ConstructorEmailView, SearchUserAjax
 
-from views import ConstructorEmailView,FirstTemplateView,TemplateRenderer, TemplateLoadAjax
+from views import ConstructorEmailView,FirstTemplateView,TemplateRenderer, TemplateLoadAjax, SaveTemplateView
 
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -23,6 +23,8 @@ urlpatterns = patterns('',
     url(r'^search_users/$', SearchUserAjax.as_view()),
 # загрузка выбранного шаблона
     url(r'^template_load/(?P<id>[0-9]+)/$', TemplateLoadAjax.as_view()),
+# сохранение шаблона в БД
+    url(r'^save_template/$', SaveTemplateView.as_view()),
 
     url(r'^first_template/$', FirstTemplateView.as_view(), name='first_template'),
     url(r'^render_template/$', TemplateRenderer.as_view(), name='render_template' ),

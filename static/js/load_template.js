@@ -20,7 +20,7 @@ function loadTemplate(template_id){
         function_load
     );
 
-
+    document.getElementById('errors').innerHTML = '';
     return false;
 }
 

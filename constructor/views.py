@@ -11,6 +11,9 @@ from django.contrib.auth.models import Group, User
 
 from django import template
 from constructor import models
+import datetime
+from django.conf import settings
+import os
 
 
 
@@ -22,6 +25,7 @@ class ConstructorEmailView(View):
     def get(self, request):
         args = {}
         args['groups'] = models.CompanyGroup.objects.all()
+        args['companies'] = models.Company.objects.all().values('id', 'company_name')
         args['locations'] = models.Location.objects.all()
         # получаем путь до шаблонов
         args['templates'] = models.Template.objects.all().values('name', 'id')
@@ -71,6 +75,85 @@ class TemplateRenderer(View):
 
         args = {'title': title,'text':text, 'video':url}
         c = RequestContext(request,args)
-        print template_obj.render(c)
+        #print template_obj.render(c)
         return HttpResponse(template_obj.render(c))
 
+class SaveTemplateView(View):
+    def post(self, request):
+        template_id = request.POST.get('temp_id')
+        subject = request.POST.get('subject')
+        title = request.POST.get('title')
+        text = request.POST.get('text')
+        images = request.POST.get('images')
+        multimedia = request.POST.get('multi_url')
+        footer = request.POST.get('footer')
+
+        locations = json.loads(request.POST.get('locations'))
+        groups = json.loads(request.POST.get('groups'))
+        users = json.loads(request.POST.get('users'))
+
+        str_datetime = request.POST.get('datetime')
+        datetime_format = datetime.datetime.strptime(str_datetime, '%Y-%m-%d %H:%M')
+
+
+        template_obj = models.Template.objects.get(pk=template_id)
+        email_obj = models.Email(
+            email_template = template_obj,
+            subject = subject,
+            title = title,
+            text = text,
+            multimedia_link = multimedia,
+            footer = footer
+        )
+
+        email_obj.save()
+
+# добавление местопложения, групп пользователей и компаний
+        locations_obj = models.Location.objects.filter(id__in = locations)
+        groups_obj = models.CompanyGroup.objects.filter(id__in=groups)
+        users_obj = models.Company.objects.filter(id__in=users)
+
+        email_obj.locations.add(*locations_obj)
+        email_obj.groups.add(*groups_obj)
+        email_obj.users.add(*users_obj)
+
+        email_obj.save()
+
+
+# добавление картинки
+        print request.POST.get('images')
+        print type(request.POST.get('images'))
+        fuv = FileUploadView()
+        images_list = fuv.add_image(request, 'email_images', 'email_picture', email_obj)
+
+        models.Image.objects.bulk_create(images_list)
+
+        return HttpResponse('200', 'text.plain')
+
+
+# загрузка файлов
+class FileUploadView():
+    def add_image(self, request, UPLOAD_TO, FILENAME, EMAIL_OBJ):
+        print request.FILES
+        if request.FILES and request.FILES.get('images'):
+            return self.__save_file(UPLOAD_TO,
+                             request.FILES.getlist('images'),
+                             FILENAME,
+                             EMAIL_OBJ)
+
+
+        return []
+
+    def __save_file(self, dest_path, files, filename, email):
+        image_obj = []
+        for f in files:
+            original_name, file_extension = os.path.splitext(f.name)
+            filename = filename + '-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + file_extension
+            url = dest_path + '/' + filename
+            path = settings.MEDIA_ROOT + url
+            with open(path, 'wb+') as destination:
+                for chunk in f.chunks():
+                    destination.write(chunk)
+
+            image_obj.append(models.Image(email = email, picture = path))
+        return image_obj

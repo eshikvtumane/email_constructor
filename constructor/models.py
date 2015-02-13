@@ -9,11 +9,18 @@ class Email(models.Model):
         verbose_name_plural = 'Созданные письма'
 
     email_template = models.ForeignKey('Template')
+    subject = models.CharField(max_length=255)
     title = models.TextField()
     text = models.TextField()
 
-    multimedia_link = models.URLField()
+    multimedia_link = models.TextField()
     footer = models.TextField()
+
+
+    groups = models.ManyToManyField('CompanyGroup')
+    users = models.ManyToManyField('Company')
+    locations = models.ManyToManyField('Location')
+
 
 class Template(models.Model):
     class Meta:
