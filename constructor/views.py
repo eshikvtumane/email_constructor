@@ -72,6 +72,8 @@ class TemplateRenderer(View):
         url = request.POST.get('video')
         image = request.FILES
 
+
+
         image_path = self.__image_save(request)
 
         t = models.Template.objects.all().get(id=template_id).template

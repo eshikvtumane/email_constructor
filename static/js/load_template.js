@@ -5,11 +5,24 @@ function loadTemplate(template_id){
     function_load = function(data){
         document.getElementById('template').innerHTML = data;
 
-
         CKEDITOR.replace('text', {
         language: 'ru'});
-
         CKEDITOR.config.extraPlugins = 'justify';
+
+        $('.color').ColorPicker({
+
+            onSubmit: function(hsb, hex, rgb, el) {
+                $(el).val(hex);
+                $(el).ColorPickerHide();
+            },
+            onBeforeShow: function () {
+                $(this).ColorPickerSetColor(this.value);
+            }
+        })
+        .bind('keyup', function(){
+            $(this).ColorPickerSetColor(this.value);
+
+        });
 
     }
 
