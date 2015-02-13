@@ -76,6 +76,7 @@ class TemplateRenderer(View):
 
         image_path = self.__image_save(request)
 
+
         t = models.Template.objects.all().get(id=template_id).template
         template_obj = get_template(t)
 
@@ -86,7 +87,7 @@ class TemplateRenderer(View):
             img_key = 'image' + str(image_count)
             args[img_key] = img
             image_count += 1
-
+        print args
         c = RequestContext(request,args)
         #print template_obj.render(c)
 
