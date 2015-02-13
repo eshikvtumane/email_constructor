@@ -11,3 +11,12 @@ class ConstructorEmailView(View):
         args = {}
 
         return render_to_response(self.template, RequestContext(request, args))
+
+
+
+class FirstTemplateView(View):
+    template = 'template_1.html'
+    def get(self, request):
+        args = {}
+
+        return render_to_response(self.template, RequestContext(request, args))
