@@ -22,6 +22,16 @@ class Email(models.Model):
     from_email = models.CharField(max_length = 255)
 
 
+# модель для хранения цветов, используемых в шаблоне
+class Color(models.Model):
+    class Meta:
+        db_table = 'Colors'
+        verbose_name = 'Цвет блока'
+        verbose_name_plural = 'Цвета блоков'
+
+    email = models.ForeignKey('Email')
+    color = models.CharField(max_length = 6)
+
 
 class Template(models.Model):
     class Meta:

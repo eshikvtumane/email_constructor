@@ -40,7 +40,8 @@ def email_send(request, email_id):
     emails_list = email_parameters.users.values('company_email')
     emails = [ d['company_email'] for d in emails_list]
 
-
+    print email_parameters.users.values('company_name')
+    print emails
 # генератор шаблона
     content = Context(args)
 # генерация простого текста на случай, есди просмоторщик не сможет распознать наше письмо

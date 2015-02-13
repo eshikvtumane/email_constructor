@@ -9,11 +9,12 @@ $(document).ready(function(){
 
     $('#btn_next').click(function(){
     // проверка: существуют ли данные элементы
-        try{
+        /*try{
             var subject = document.getElementById('subject').value;
             var title = document.getElementById('title').value;
             var text = CKEDITOR.instances.text.getData();
             var footer = document.getElementById('footer').value; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         }
         catch(e){
             document.getElementById('errors').innerHTML = 'Выберите шаблон письма';
@@ -23,7 +24,8 @@ $(document).ready(function(){
         // проверка на пустые значения
         error_arr = inputsValidate(subject, title, text, footer)
         len = error_arr.length
-
+*/
+        var len = 0
         // если ошибок нет
         if(len == 0){
         // переход на следующий блок

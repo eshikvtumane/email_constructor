@@ -1,13 +1,11 @@
 function loadTemplate(template_id){
     //document.getElementById('template').innerHTML = '<object type="text/html" data="/media/' + template_url + '"></object>';
     document.getElementById('temp_id').value = template_id;
+    //$('#template').load('/media/' + template_name);
 
     function_load = function(data){
         document.getElementById('template').innerHTML = data;
 
-        CKEDITOR.replace('text', {
-        language: 'ru'});
-        CKEDITOR.config.extraPlugins = 'justify';
 
         $('.color').ColorPicker({
 

@@ -6,6 +6,14 @@ $(document).ready(function(){
     $('#delete_users').click(function(){
         cloneOption('added_users', 'searching_users');
     });
+
+    document.getElementById('searching_users').ondblclick = function(){
+        cloneOption('searching_users', 'added_users');
+    };
+
+    document.getElementById('added_users').ondblclick = function(){
+        cloneOption('added_users', 'searching_users');
+    };
 });
 
 

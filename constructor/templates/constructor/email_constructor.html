@@ -38,10 +38,13 @@
 			<div class="container">
 				<div id="email" class="well well-lg">
 
-                    <div id='select_templates'>
+                    <div id='select_templates' style="wigth: 100%">
                         {% for template in templates %}
-                            <div>
-                                <a href="#" onclick="return loadTemplate('{{ template.id }}');">{{ template.name }}</a>
+                            <div style="wigth: 10%">
+                                <div>
+                                    <a class='button_select' href="#" onclick="return loadTemplate('{{ template.id }}');">+</a>
+                                </div>
+                                    {{ template.name }}
                             </div>
                         {% endfor %}
                     </div>
@@ -49,10 +52,10 @@
 
                     <form action="/constructor/render_template/" method="post" target="_blank" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="col-sm-12">
+                        <div class="col-sm-12" style="padding-bottom:3ex;">
                             <h3>Шаблон</h3>
                             <input type="hidden" name="template_id" id="temp_id">
-                            <div>
+                            <div style="padding-bottom:3ex;">
                                 <label>Тема письма</label>
                                 <input type="text" id="subject" name="subject" class="form-control">
                             </div>
@@ -61,6 +64,7 @@
                             <div id='template' class="col-sm-12 padding-elem">
 
                             </div>
+
                         </div>
 
 

@@ -31,7 +31,7 @@ class ConstructorEmailView(View):
         args['companies'] = models.Company.objects.all()
         args['locations'] = models.Location.objects.all()
         # получаем путь до шаблонов
-        args['templates'] = models.Template.objects.all().values('name', 'id')
+        args['templates'] = models.Template.objects.all().values('name', 'id', 'html')
         return render_to_response(self.template, RequestContext(request, args))
 
 
@@ -64,40 +64,67 @@ class FirstTemplateView(View):
         return render_to_response(self.template, RequestContext(request, args))
 
 # генерирование шаблона для предварительного шаблона
-class TemplateRenderer(View):
-    def post(self,request):
-        template_id = request.POST.get('template_id')
-        title = request.POST.get('title')
-        text = request.POST.get('text')
-        url = request.POST.get('video')
-        image = request.FILES
+class TemplateRenderPreview(View):
+    def post(self, request):
+        tr = TemplateRenderer()
+        template_render = tr.generateTemplate(request, request.POST, request.FILES)
+        return HttpResponse(template_render)
 
 
+class TemplateRenderer():
+    def generateTemplate(self, request, request_method, files):
+# выборка всех передыных значений с клиента
+        template_id = request_method.get('template_id')
+        title = request_method.get('title')
+        text = request_method.get('text')
+        url = request_method.get('video')
+        footer = request_method.get('footer')
+        colors = request_method.getlist('color[]')
+        texts = request_method.getlist('text')
 
-        image_path = self.__image_save(request)
+        r = request.FILES.getlist('image')
+        image_path = self.__image_save(request.FILES)
 
 
         t = models.Template.objects.all().get(id=template_id).template
         template_obj = get_template(t)
 
-        args = {'title': title,'text':text, 'video':url}
+        args = {'title': title,'text':text, 'video':url, 'footer': footer}
 
+        # Добавление цвета
+        color_count = 1
+        for color in colors:
+            key = 'color' + str(color_count)
+            args[key] = color
+            color_count += 1
+
+        # добавление текста
+        text_count = 1
+        for text in texts:
+            key = 'text' + str(text_count)
+            args[key] = text
+            text_count += 1
+
+
+# Добавление путей к изображениям
         image_count = 1
         for img in image_path:
             img_key = 'image' + str(image_count)
             args[img_key] = img
             image_count += 1
         print args
-        c = RequestContext(request,args)
-        #print template_obj.render(c)
+        c = RequestContext(request, args)
+        return template_obj.render(c)
+        #return HttpResponse(template_obj.render(c))
 
-        return HttpResponse(template_obj.render(c))
-
-    def __image_save(self, request):
-        files = request.FILES
+# сохранение изображений на сервер
+    def __image_save(self, file):
+        print file
+        print type(file)
+        files = file.getlist('image')
         arr_path = []
         for f in files:
-            image = files.get(f)
+            image = f
             original_name, file_extension = os.path.splitext(image.name)
             filename = 'tmp_image' + '-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + file_extension
             save_path = default_storage.save(os.path.join('tmp', filename), ContentFile(image.read()))
@@ -105,6 +132,8 @@ class TemplateRenderer(View):
             arr_path.append(image_url)
         return arr_path
 
+
+# сохранение шаблона письма в базу
 class SaveTemplateView(View):
     def post(self, request):
         try:
@@ -116,6 +145,7 @@ class SaveTemplateView(View):
             multimedia = request.POST.get('multi_url')
             footer = request.POST.get('footer')
             address = request.POST.get('address')
+            colors = request.POST.getlist('colors')
 
             locations = json.loads(request.POST.get('locations'))
             groups = json.loads(request.POST.get('groups'))
@@ -140,21 +170,29 @@ class SaveTemplateView(View):
             email_obj.save()
 
     # добавление местопложения, групп пользователей и компаний
-
-            usr_locations = list(models.Company.objects.filter(location__in = locations))
-            usr_groups = list(models.Company.objects.filter(group__in = groups))
-            users_obj = list(models.Company.objects.filter(id__in=users))
+            usr_locations = models.Company.objects.filter(location__in = locations)
+            usr_groups = models.Company.objects.filter(group__in = groups)
+            users_obj = models.Company.objects.filter(id__in=users)
 
             tuple_users_id = Set()
+            print '=' * 40
+            print 'loc', locations
+            print 'gr', groups
+            print 'us', users
+
+            print usr_locations
+            print usr_groups
+            print users_obj
 
             for usr1, usr2, usr3 in zip(usr_locations, usr_groups, usr_locations):
+                print usr1.company_name, usr2.company_name, usr3.company_name
                 tuple_users_id.add(usr1.id)
                 tuple_users_id.add(usr2.id)
                 tuple_users_id.add(usr3.id)
 
             users_id = list(tuple_users_id)
             print users_id
-
+            print '=' * 40
             email_obj.users.add(*users_id)
 
             email_obj.save()
@@ -166,9 +204,15 @@ class SaveTemplateView(View):
 
             models.Image.objects.bulk_create(images_list)
 
+    # добавление цвета в базу
+            colors_obj = [models.Color(email = email_obj, color = color) for color in colors]
+            models.Color.objects.bulk_create(colors_obj)
+
     # добавление задачи в расписание
-            sh = Shedule(email = email_obj, datetime = datetime_format)
-            sh.save()
+            #sh = Shedule(email = email_obj, datetime = datetime_format)
+            #sh.save()
+
+
 
             return HttpResponse('200', 'text/plain')
 
@@ -181,7 +225,6 @@ class SaveTemplateView(View):
 # загрузка файлов
 class FileUploadView():
     def add_image(self, request, UPLOAD_TO, FILENAME, EMAIL_OBJ):
-        print request.FILES
         if request.FILES and request.FILES.get('images'):
             return self.__save_file(UPLOAD_TO,
                              request.FILES.getlist('images'),

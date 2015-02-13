@@ -46,12 +46,21 @@ function templateSave(){
         form_data.append('address', datetime);
 
 
+        // добавление шзображений
         var image_inputs = document.getElementsByTagName('input');
         inputs_len = image_inputs.length;
         for(var i = 0; i < inputs_len; i++) {
             if(image_inputs[i].type.toLowerCase() == 'file') {
                 form_data.append('images', image_inputs[i].files[0]);
             }
+        }
+
+        // добавление цвета
+        var colors = document.getElementsByName('color[]');
+        colors_len = colors.length;
+        for(var i = 0; i < colors_len; i++){
+            console.log(colors[i].value);
+            form_data.append('colors', colors[i].value);
         }
 
 

@@ -4,11 +4,11 @@
 	</head>
 
 	<body>
-		<div>
+		<div style="background: #{{ color1 }};">
 			<label>Title</label>
 			{{ title }}
 		</div>
-		<div>
+		<div style="background: #{{ color2 }};">
 			<label>Text</label>
 			{{ text|safe }}
 		</div>
@@ -22,5 +22,9 @@
 
 			
 		</div>
+
+    <div style="background: #{{ color3 }};">
+        {{ footer }}
+    </div>
 	</body>
 </html>
