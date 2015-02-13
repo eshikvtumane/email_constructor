@@ -17,9 +17,7 @@ class Email(models.Model):
     footer = models.TextField()
 
 
-    groups = models.ManyToManyField('CompanyGroup', blank=True, null=True)
     users = models.ManyToManyField('Company', blank=True, null=True)
-    locations = models.ManyToManyField('Location', blank=True, null=True)
 
     from_email = models.CharField(max_length = 255)
 
@@ -75,3 +73,4 @@ class Location(models.Model):
         verbose_name_plural = 'Местоположения'
 
     name = models.CharField(max_length=100)
+

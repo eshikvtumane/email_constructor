@@ -31,7 +31,7 @@ class EmailAdmin(admin.ModelAdmin):
     inlines = [
         ImageInline
     ]
-    fields = ['email_template', 'subject', 'title', 'text', 'multimedia_link', 'footer', 'groups', 'users', 'locations', 'from_email']
+    fields = ['email_template', 'subject', 'title', 'text', 'multimedia_link', 'footer', 'users', 'from_email']
 
 
 

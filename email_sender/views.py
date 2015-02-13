@@ -1,15 +1,17 @@
+#-*- coding: utf8 -*-
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.template import Context
 
 from django.core.mail import EmailMultiAlternatives
-from constructor.model import Email, Template, Image
+from constructor.models import Email, Template, Image
 
 # Create your views here.
 
 def email_send(request, email_id):
+    id = email_id
     # получаем письмо, которое необходимо отправить
-    email_parameters = Email.objects.all().get(pk=id)
+    email_parameters = Email.objects.get(pk=id)
 
     # получаем ссылку на шаблон
     email_template = Template.objects.all().get(pk=email_parameters.email_template).template
@@ -28,8 +30,8 @@ def email_send(request, email_id):
         args[key] = img['picture']
         img_count += 1
 
-    companies = email_parameters.users.all().values('users__company_email')
-
+    companies = email_parameters.users.all()
+    print companies
 
     groups = email_parameters.groups.all().values('groups__')
     locations = email_parameters.locations.all()
@@ -38,7 +40,8 @@ def email_send(request, email_id):
 # генератор шаблона
     content = Context(args)
 # генерация простого текста на случай, есди просмоторщик не сможет распознать наше письмо
-    text_content = plaintext.render(content)
+    #text_content = plaintext.render(content)
+    text_content = 'Hello'
 # генерация html письма
     html_content = html.render(content)
 
@@ -48,4 +51,4 @@ def email_send(request, email_id):
     to = []
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
     msg.attach_alternative(html_content, 'text/html')
-    msg.send()
+    #msg.send()

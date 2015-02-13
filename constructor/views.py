@@ -15,6 +15,9 @@ import os
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
+from sets import Set
+
+from email_sender.models import Shedule
 
 
 
@@ -115,6 +118,7 @@ class SaveTemplateView(View):
             groups = json.loads(request.POST.get('groups'))
             users = json.loads(request.POST.get('users'))
 
+        # переводим дату и время из строки в объект
             str_datetime = request.POST.get('datetime')
             datetime_format = datetime.datetime.strptime(str_datetime, '%Y-%m-%d %H:%M')
 
@@ -133,29 +137,41 @@ class SaveTemplateView(View):
             email_obj.save()
 
     # добавление местопложения, групп пользователей и компаний
-            locations_obj = models.Location.objects.filter(id__in = locations)
-            groups_obj = models.CompanyGroup.objects.filter(id__in=groups)
-            users_obj = models.Company.objects.filter(id__in=users)
 
-            email_obj.locations.add(*locations_obj)
-            email_obj.groups.add(*groups_obj)
-            email_obj.users.add(*users_obj)
+            usr_locations = list(models.Company.objects.filter(location__in = locations))
+            usr_groups = list(models.Company.objects.filter(group__in = groups))
+            users_obj = list(models.Company.objects.filter(id__in=users))
+
+            tuple_users_id = Set()
+
+            for usr1, usr2, usr3 in zip(usr_locations, usr_groups, usr_locations):
+                tuple_users_id.add(usr1.id)
+                tuple_users_id.add(usr2.id)
+                tuple_users_id.add(usr3.id)
+
+            users_id = list(tuple_users_id)
+            print users_id
+
+            email_obj.users.add(*users_id)
 
             email_obj.save()
 
 
     # добавление картинки
-            print request.POST.get('images')
-            print type(request.POST.get('images'))
             fuv = FileUploadView()
             images_list = fuv.add_image(request, 'email_images', 'email_picture', email_obj)
 
             models.Image.objects.bulk_create(images_list)
 
+    # добавление задачи в расписание
+            sh = Shedule(email = email_obj, datetime = datetime_format)
+            sh.save()
+
             return HttpResponse('200', 'text/plain')
 
         except:
             return HttpResponse('500', 'text/plain')
+
 
 
 

@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^constructor/', include('constructor.urls')),
+    url(r'^email_send/', include('email_sender.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
 #http://stackoverflow.com/questions/16196603/images-from-imagefield-in-django-dont-load-in-template
