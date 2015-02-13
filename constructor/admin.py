@@ -16,7 +16,7 @@ class LocationAdmin(admin.ModelAdmin):
     fields = ["name"]
 
 class CompanyAdmin(admin.ModelAdmin):
-    fields = ['company_name', 'location']
+    fields = ['company_name', 'location', 'company_email']
 
 class CompanyGroupAdmin(admin.ModelAdmin):
     inlines = [
@@ -31,7 +31,7 @@ class EmailAdmin(admin.ModelAdmin):
     inlines = [
         ImageInline
     ]
-    fields = ['email_template', 'subject', 'title', 'text', 'multimedia_link', 'footer', 'groups', 'users', 'locations']
+    fields = ['email_template', 'subject', 'title', 'text', 'multimedia_link', 'footer', 'groups', 'users', 'locations', 'from_email']
 
 
 

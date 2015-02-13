@@ -17,9 +17,11 @@ class Email(models.Model):
     footer = models.TextField()
 
 
-    groups = models.ManyToManyField('CompanyGroup')
-    users = models.ManyToManyField('Company')
-    locations = models.ManyToManyField('Location')
+    groups = models.ManyToManyField('CompanyGroup', blank=True, null=True)
+    users = models.ManyToManyField('Company', blank=True, null=True)
+    locations = models.ManyToManyField('Location', blank=True, null=True)
+
+    from_email = models.CharField(max_length = 255)
 
 
 class Template(models.Model):
@@ -62,6 +64,8 @@ class Company(models.Model):
     group = models.ForeignKey('CompanyGroup')
     location = models.ForeignKey('Location')
     company_name = models.TextField()
+
+    company_email = models.CharField(max_length=254)
 
 # Местоположение полователя
 class Location(models.Model):

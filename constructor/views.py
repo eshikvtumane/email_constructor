@@ -101,55 +101,62 @@ class TemplateRenderer(View):
 
 class SaveTemplateView(View):
     def post(self, request):
-        template_id = request.POST.get('temp_id')
-        subject = request.POST.get('subject')
-        title = request.POST.get('title')
-        text = request.POST.get('text')
-        images = request.POST.get('images')
-        multimedia = request.POST.get('multi_url')
-        footer = request.POST.get('footer')
+        try:
+            template_id = request.POST.get('temp_id')
+            subject = request.POST.get('subject')
+            title = request.POST.get('title')
+            text = request.POST.get('text')
+            images = request.POST.get('images')
+            multimedia = request.POST.get('multi_url')
+            footer = request.POST.get('footer')
+            address = request.POST.get('address')
 
-        locations = json.loads(request.POST.get('locations'))
-        groups = json.loads(request.POST.get('groups'))
-        users = json.loads(request.POST.get('users'))
+            locations = json.loads(request.POST.get('locations'))
+            groups = json.loads(request.POST.get('groups'))
+            users = json.loads(request.POST.get('users'))
 
-        str_datetime = request.POST.get('datetime')
-        datetime_format = datetime.datetime.strptime(str_datetime, '%Y-%m-%d %H:%M')
-
-
-        template_obj = models.Template.objects.get(pk=template_id)
-        email_obj = models.Email(
-            email_template = template_obj,
-            subject = subject,
-            title = title,
-            text = text,
-            multimedia_link = multimedia,
-            footer = footer
-        )
-
-        email_obj.save()
-
-# добавление местопложения, групп пользователей и компаний
-        locations_obj = models.Location.objects.filter(id__in = locations)
-        groups_obj = models.CompanyGroup.objects.filter(id__in=groups)
-        users_obj = models.Company.objects.filter(id__in=users)
-
-        email_obj.locations.add(*locations_obj)
-        email_obj.groups.add(*groups_obj)
-        email_obj.users.add(*users_obj)
-
-        email_obj.save()
+            str_datetime = request.POST.get('datetime')
+            datetime_format = datetime.datetime.strptime(str_datetime, '%Y-%m-%d %H:%M')
 
 
-# добавление картинки
-        print request.POST.get('images')
-        print type(request.POST.get('images'))
-        fuv = FileUploadView()
-        images_list = fuv.add_image(request, 'email_images', 'email_picture', email_obj)
+            template_obj = models.Template.objects.get(pk=template_id)
+            email_obj = models.Email(
+                email_template = template_obj,
+                subject = subject,
+                title = title,
+                text = text,
+                multimedia_link = multimedia,
+                footer = footer,
+                from_email = address
+            )
 
-        models.Image.objects.bulk_create(images_list)
+            email_obj.save()
 
-        return HttpResponse('200', 'text.plain')
+    # добавление местопложения, групп пользователей и компаний
+            locations_obj = models.Location.objects.filter(id__in = locations)
+            groups_obj = models.CompanyGroup.objects.filter(id__in=groups)
+            users_obj = models.Company.objects.filter(id__in=users)
+
+            email_obj.locations.add(*locations_obj)
+            email_obj.groups.add(*groups_obj)
+            email_obj.users.add(*users_obj)
+
+            email_obj.save()
+
+
+    # добавление картинки
+            print request.POST.get('images')
+            print type(request.POST.get('images'))
+            fuv = FileUploadView()
+            images_list = fuv.add_image(request, 'email_images', 'email_picture', email_obj)
+
+            models.Image.objects.bulk_create(images_list)
+
+            return HttpResponse('200', 'text/plain')
+
+        except:
+            return HttpResponse('500', 'text/plain')
+
 
 
 # загрузка файлов

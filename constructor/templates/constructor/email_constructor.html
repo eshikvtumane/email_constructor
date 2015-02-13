@@ -28,30 +28,35 @@
 
 {% block content %}
     <div>
-			<div id='select_templates'>
-                {% for template in templates %}
-                    <div>
-                        <a href="#" onclick="return loadTemplate('{{ template.id }}');">{{ template.name }}</a>
-                    </div>
-                {% endfor %}
-			</div>
 
 			<div class="container">
 				<div id="email" class="well well-lg">
+
+                    <div id='select_templates'>
+                        {% for template in templates %}
+                            <div>
+                                <a href="#" onclick="return loadTemplate('{{ template.id }}');">{{ template.name }}</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+
                     <form action="/constructor/render_template/" method="post" target="_blank" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="col-sm-12">
                             <h3>Шаблон</h3>
+                            <input type="hidden" name="template_id" id="temp_id">
                             <div>
                                 <label>Тема письма</label>
-                                <input type="text" id="subject" name="subject">
+                                <input type="text" id="subject" name="subject" class="form-control">
                             </div>
 
-                            <input type="hidden" name="template_id" id="temp_id">
-                            <div id='template'  class="col-sm-10">
+
+                            <div id='template' class="col-sm-12 padding-elem">
 
                             </div>
                         </div>
+
 
                         <div class="col-sm-6" style="display: none">
                             <h3>Предпросмотр</h3>
@@ -60,11 +65,13 @@
                             </div>
                         </div>
 
-                        <div id="errors">
+                        <div id="errors" class="padding-elem">
 
                         </div>
 
-                        <div class="navigation">
+                        <div style="height: 3ex;"></div>
+
+                        <div class="navigation text-center" style="margin-top:3ex;">
                             <input type='submit' value='Предпросмотр письма' class="btn btn-primary" id="btn_preview">
                             <input type='button' value='Далее' class="btn btn-primary" id="btn_next" onclick="templatePreview()">
                         </div>
@@ -74,9 +81,9 @@
 				<div id="setting" class="settings">
                     <div>
                         <div class="col-sm-12 well well-lg">
-                            <div class="col-sm-5">
+                            <div class="col-sm-6">
                                 <label>
-                                    Группы пользователей
+                                    Группы пользователей (компаний)
                                 </label>
                                 <select multiple="multiple" class="form-control" id="select_groups">
                                     {% for group in groups %}
@@ -89,7 +96,7 @@
 
                             </div>
 
-                            <div class="col-sm-5">
+                            <div class="col-sm-6">
                                 <label>
                                     Добавленные группы
                                 </label>
@@ -127,8 +134,9 @@
 
                                 </div>
 
-
-                                <input type="button" value="Добавить пользователей" id="add_users">
+                                <div class="text-center padding-elem">
+                                    <input type="button" value="Добавить пользователей" id="add_users" class="btn btn-primary">
+                                </div>
                             </div>
 
                             <div class="col-sm-6">
@@ -140,7 +148,10 @@
 
                                     </select>
                                 </div>
-                                <input type="button" value="Удалить пользователей" id="delete_users">
+                                <div class="text-center padding-elem">
+                                    <input type="button" value="Удалить пользователей" id="delete_users" class="btn btn-danger">
+                                </div>
+
                             </div>
 
                         </div>
@@ -163,8 +174,9 @@
 
                                 </div>
 
-
-                                <input type="button" value="Добавить местоположение" id="add_location">
+                                <div class="text-center padding-elem">
+                                    <input type="button" value="Добавить местоположение" id="add_location" class="btn btn-primary">
+                                </div>
                             </div>
 
                             <div class="col-sm-6">
@@ -176,7 +188,9 @@
 
                                     </select>
                                 </div>
-                                <input type="button" value="Удалить местоположение" id="delete_locations">
+                                <div class="text-center padding-elem">
+                                    <input type="button" value="Удалить местоположение" id="delete_locations" class="btn btn-danger">
+                                </div>
                             </div>
 
                         </div>
@@ -184,12 +198,21 @@
 					<!-- -------------------------------------------- -->
 
 
-                    <div>
+                    <div class="well well-lg">
                         <label>
                             Выбор даты и времени отправки письма
                         </label>
                         <div id="datetime">
-                            <input id="datetimepicker" type="text" >
+                            <input id="datetimepicker" type="text" class="form-control">
+                        </div>
+                    </div>
+
+                     <div class="well well-lg">
+                        <label>
+                            Адрес рассылки
+                        </label>
+                        <div>
+                            <input id="address" type="text" class="form-control">
                         </div>
                     </div>
 
@@ -198,9 +221,9 @@
 
                         </div>
 
-                    <div id="navigation">
-                        <input type='button' value='Назад' class="btn btn-primary" id="btn_back">
-                        <input type='button' value='Создать письмо' class="btn btn-primary" onclick="templateSave();">
+                    <div id="navigation text-center padding-elem">
+                        <input type='button' value='Назад' class="btn btn-primary" id="btn_back" class="btn btn-primary">
+                        <input type='button' value='Создать письмо' class="btn btn-primary" onclick="templateSave();" class="btn btn-primary">
                     </div>
 				</div>
 			</div>

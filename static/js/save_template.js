@@ -14,9 +14,14 @@ function templateSave(){
     var users = selectToArray('added_users');
     var locations = selectToArray('added_locations');
     var datetime = document.getElementById('datetimepicker').value;
+    var address = document.getElementById('address').value;
 
     if(datetime == ''){
         document.getElementById('error-two').innerHTML = 'Выберите время отправки';
+        return;
+    }
+    if(address = ''){
+        document.getElementById('error-two').innerHTML = 'Введите адрес';
         return;
     }
 
@@ -38,6 +43,7 @@ function templateSave(){
         form_data.append('users', JSON.stringify(users));
         form_data.append('locations',JSON.stringify(locations));
         form_data.append('datetime', datetime);
+        form_data.append('address', datetime);
 
 
         var image_inputs = document.getElementsByTagName('input');
@@ -57,6 +63,13 @@ function templateSave(){
             contentType: false,
             success:function(data){
                 console.log(data);
+                if(data=='200'){
+                    document.getElementById('error-two').innerHTML = 'Шаблон и параметры успешно сохранены';
+                }
+                else{
+                    document.getElementById('error-two').innerHTML = 'Произошла ошибка. Пожалуйста, попробуйте произвести сохранение позже.';
+                    document.getElementById('error-two').innerHTML = 'Произошла ошибка. Пожалуйста, попробуйте произвести сохранение позже.';
+                }
             }
         })
     }

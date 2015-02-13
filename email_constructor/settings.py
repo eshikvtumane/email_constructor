@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'constructor',
+    'email_sender',
 )
 
 MIDDLEWARE_CLASSES = (
