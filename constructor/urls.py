@@ -26,11 +26,5 @@ urlpatterns = patterns('',
 # сохранение шаблона в БД
     url(r'^save_template/$', SaveTemplateView.as_view()),
 
-    url(r'^first_template/$', FirstTemplateView.as_view(), name='first_template'),
     url(r'^render_template/$', TemplateRenderer.as_view(), name='render_template' ),
 )
-
-#http://stackoverflow.com/questions/16196603/images-from-imagefield-in-django-dont-load-in-template
-#https://docs.djangoproject.com/en/dev/howto/static-files/#deploying-static-files-in-a-nutshell
-urlpatterns += staticfiles_urlpatterns()
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

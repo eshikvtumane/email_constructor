@@ -1,5 +1,6 @@
 $(document).ready(function(){
     //http://xdsoft.net/jqplugins/datetimepicker/
+    // инициализируем datapicker
     $('#datetimepicker').datetimepicker({
         lang:'ru',
         step:10,
@@ -7,11 +8,11 @@ $(document).ready(function(){
     });
 
     $('#btn_next').click(function(){
+    // проверка: существуют ли данные элементы
         try{
             var subject = document.getElementById('subject').value;
             var title = document.getElementById('title').value;
             var text = CKEDITOR.instances.text.getData();
-            //var image = document.getElementById('image');
             var footer = document.getElementById('footer').value; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
         catch(e){
@@ -19,16 +20,18 @@ $(document).ready(function(){
             return;
         }
 
-
+        // проверка на пустые значения
         error_arr = inputsValidate(subject, title, text, footer)
         len = error_arr.length
+
+        // если ошибок нет
         if(len == 0){
-            console.log('OK x 1');
+        // переход на следующий блок
             $('#email').hide();
             $('#setting').show();
-            console.log('OK x 2');
         }
         else{
+        // если есть ошибки, остаёмся
             list_err = '<ul>';
             for(var i = 0; i < len; i++){
                 list_err += '<li>' + error_arr[i] + '</li>';
@@ -38,16 +41,16 @@ $(document).ready(function(){
         }
     });
 
+    // кнопка возврата в блок с шаблоном письма
     $('#btn_back').click(function(){
-        console.log('OK x 1');
         $('#setting').hide();
         $('#email').show();
-        console.log('OK x 2');
     });
 
 });
 
-function inputsValidate(subject, title, text, footer){
+// проверка значений на пустые значения
+function inputsValidate(subject, title, text, footer, input_image_name){
     error_arr = new Array();
 
     if(subject == ''){
@@ -63,5 +66,23 @@ function inputsValidate(subject, title, text, footer){
         error_arr.push('Заполните футер');
     }
 
+// валидация изображение
+    image_count = 0;
+    quantity_count = 0;
+    var image_inputs = document.getElementsByTagName('input');
+        inputs_len = image_inputs.length;
+        for(var i = 0; i < inputs_len; i++) {
+            if(image_inputs[i].type.toLowerCase() == 'file') {
+                quantity_count += 1;
+                if(image_inputs[i].files[0] != null){
+                    image_count += 1;
+                }
+            }
+        }
+
+    // если количество инпутов равен количеству загруженных изображений
+    if(image_count != quantity_count){
+        error_arr.push('Добавлены не все картинки');
+    }
     return error_arr
 }

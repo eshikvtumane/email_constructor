@@ -7,14 +7,18 @@ function templateSave(){
     var text = CKEDITOR.instances.text.getData();
     //var image = document.getElementById('image');
     var video = document.getElementById('video').value;
-    //var footer = document.getElementById('footer').value; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    footer = ''
+    var footer = document.getElementById('footer').value; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
     var groups = selectToArray('adding_groups');
     var users = selectToArray('added_users');
     var locations = selectToArray('added_locations');
     var datetime = document.getElementById('datetimepicker').value;
 
+    if(datetime == ''){
+        document.getElementById('error-two').innerHTML = 'Выберите время отправки';
+        return;
+    }
 
     errors = inputsValidate(subject, title, text, footer)
 
@@ -43,6 +47,7 @@ function templateSave(){
                 form_data.append('images', image_inputs[i].files[0]);
             }
         }
+
 
         $.ajax({
             type:'POST',

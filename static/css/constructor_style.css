@@ -5,7 +5,8 @@
 
 #template{
     height: 60ex;
-    border: 1px solid black
+    border: 1px solid black;
+    overflow-y: auto;
 }
 
 #preview{

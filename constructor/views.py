@@ -1,20 +1,20 @@
 #-*- coding: utf8 -*-
+import json
+import os
 from django.shortcuts import render, render_to_response
 from django.views.generic import View
 from django.template import RequestContext, Context
 from django.template.loader import get_template
 from django.http import HttpResponse
-
-import json
-
 from django.contrib.auth.models import Group, User
-
 from django import template
 from constructor import models
 import datetime
 from django.conf import settings
 import os
-
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
 
 
 
@@ -25,7 +25,7 @@ class ConstructorEmailView(View):
     def get(self, request):
         args = {}
         args['groups'] = models.CompanyGroup.objects.all()
-        args['companies'] = models.Company.objects.all().values('id', 'company_name')
+        args['companies'] = models.Company.objects.all()
         args['locations'] = models.Location.objects.all()
         # получаем путь до шаблонов
         args['templates'] = models.Template.objects.all().values('name', 'id')
@@ -60,23 +60,44 @@ class FirstTemplateView(View):
 
         return render_to_response(self.template, RequestContext(request, args))
 
-
+# генерирование шаблона для предварительного шаблона
 class TemplateRenderer(View):
     def post(self,request):
         template_id = request.POST.get('template_id')
         title = request.POST.get('title')
         text = request.POST.get('text')
         url = request.POST.get('video')
-        #image = request.FILES['image']
-        #print template_id
+        image = request.FILES
+
+        image_path = self.__image_save(request)
 
         t = models.Template.objects.all().get(id=template_id).template
         template_obj = get_template(t)
 
         args = {'title': title,'text':text, 'video':url}
+
+        image_count = 1
+        for img in image_path:
+            img_key = 'image' + str(image_count)
+            args[img_key] = img
+            image_count += 1
+
         c = RequestContext(request,args)
         #print template_obj.render(c)
+
         return HttpResponse(template_obj.render(c))
+
+    def __image_save(self, request):
+        files = request.FILES
+        arr_path = []
+        for f in files:
+            image = files.get(f)
+            original_name, file_extension = os.path.splitext(image.name)
+            filename = 'tmp_image' + '-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + file_extension
+            save_path = default_storage.save(os.path.join('tmp', filename), ContentFile(image.read()))
+            image_url = os.path.join(settings.MEDIA_URL, save_path)
+            arr_path.append(image_url)
+        return arr_path
 
 class SaveTemplateView(View):
     def post(self, request):
