@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+	<head>
+
+    <script type="text/javascript">
+        tinymce.init({
+            selector: "textarea"
+         });
+    </script>
+	</head>
+
+	<body>
+		<div>
+			<label>Title</label>
+			<input type='text' id='title' name='title' class='form-control'>
+		</div>
+		<div>
+			<label>Text</label>
+			<textarea id='text'></textarea>
+		</div>
+		<div>
+			<label>Video</label>
+			<input type='text' id='video'>
+		</div>
+	</body>
+</html>

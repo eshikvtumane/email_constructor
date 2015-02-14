@@ -22,7 +22,8 @@ class Template(models.Model):
         verbose_name_plural = 'Шаблоны писем'
 
     name = models.CharField(max_length=200)
-    html = models.TextField()
+    html = models.FileField(upload_to='html_templates')
+    template = models.FileField(upload_to='html_templates')
 
 
 class Image(models.Model):

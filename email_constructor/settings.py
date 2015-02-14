@@ -82,7 +82,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 TEMPLATE_DIRS = (
-        os.path.join(BASE_DIR,'templates'),os.path.join(BASE_DIR,"constructor/templates/constructor")
+        os.path.join(BASE_DIR,'templates'),
+        os.path.join(BASE_DIR,"constructor/templates/constructor"),
+        os.path.join(BASE_DIR,"media"),
     )
 STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 

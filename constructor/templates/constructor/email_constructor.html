@@ -14,59 +14,50 @@
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <!-- datetimepicker -->
     <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker.js' %}"></script>
+    <script src="{% static 'js/ckeditor/ckeditor.js' %}"></script>
+<!--<script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>-->
     <script src="{% static 'js/work_with_div.js' %}"></script>
     <script src="{% static 'js/work_with_group.js' %}"></script>
     <script src="{% static 'js/work_with_user.js' %}"></script>
     <script src="{% static 'js/work_with_select.js' %}"></script>
+    <script src="{% static 'js/load_template.js' %}"></script>
 {% endblock %}
 
 {% block content %}
     <div>
 			<div id='select_templates'>
-                <div>
-                    <a href="#">Шаблон 1</a>
-                </div>
-
-                <div>
-                    <a href="#">Шаблон 2</a>
-                </div>
-
-                <div>
-                    <a href="#">Шаблон 3</a>
-                </div>
-
-                <div>
-                    <a href="#">Шаблон 4</a>
-                </div>
+                {% for template in templates %}
+                    <div>
+                        <a href="#" onclick="return loadTemplate('{{ template.id }}');">{{ template.name }}</a>
+                    </div>
+                {% endfor %}
 			</div>
 
 			<div class="container">
 				<div id="email" class="well well-lg">
-                    <div class="col-sm-6">
-                        <h3>Шаблон</h3>
-                        <div id='template'  class="col-sm-10">
-                            <div>
-                                <label>
-                                    Title
-                                </label>
-                                <input type="text" id="title_">
+                    <form action="/constructor/render_template/" method="post" target="_blank" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-sm-12">
+                            <h3>Шаблон</h3>
+
+                            <input type="hidden" name="template_id" id="temp_id">
+                            <div id='template'  class="col-sm-10">
+
                             </div>
-
                         </div>
-                    </div>
 
-                    <div class="col-sm-6">
-                        <h3>Предпросмотр</h3>
-                        <div id='preview' class="col-sm-10">
+                        <div class="col-sm-6" style="display: none">
+                            <h3>Предпросмотр</h3>
+                            <div id='preview' class="col-sm-10">
 
-					    </div>
-                    </div>
+                            </div>
+                        </div>
 
-                    <div class="navigation">
-                        <input type='button' value='Предпросмотр письма' class="btn btn-primary" id="btn_preview">
-                        <input type='button' value='Далее' class="btn btn-primary" id="btn_next">
-                    </div>
-
+                        <div class="navigation">
+                            <input type='submit' value='Предпросмотр письма' class="btn btn-primary" id="btn_preview">
+                            <input type='button' value='Далее' class="btn btn-primary" id="btn_next" onclick="templatePreview()">
+                        </div>
+                    </form>
 				</div>
 
 				<div id="setting" class="settings">

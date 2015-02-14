@@ -1,8 +1,9 @@
+#-*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
 
 from views import ConstructorEmailView, SearchUserAjax
 
-from views import ConstructorEmailView,FirstTemplateView,TemplateRenderer
+from views import ConstructorEmailView,FirstTemplateView,TemplateRenderer, TemplateLoadAjax
 
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -18,10 +19,13 @@ urlpatterns = patterns('',
 
     url(r'^email_templates/$', ConstructorEmailView.as_view(), name='email_templates'),
 
+# поиск пользователей
     url(r'^search_users/$', SearchUserAjax.as_view()),
+# загрузка выбранного шаблона
+    url(r'^template_load/(?P<id>[0-9]+)/$', TemplateLoadAjax.as_view()),
 
     url(r'^first_template/$', FirstTemplateView.as_view(), name='first_template'),
-    url(r'^render_template/$', TemplateRenderer.as_view() ),
+    url(r'^render_template/$', TemplateRenderer.as_view(), name='render_template' ),
 )
 
 #http://stackoverflow.com/questions/16196603/images-from-imagefield-in-django-dont-load-in-template

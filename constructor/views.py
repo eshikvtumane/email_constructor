@@ -1,7 +1,8 @@
 #-*- coding: utf8 -*-
 from django.shortcuts import render, render_to_response
 from django.views.generic import View
-from django.template import RequestContext
+from django.template import RequestContext, Context
+from django.template.loader import get_template
 from django.http import HttpResponse
 
 import json
@@ -13,6 +14,7 @@ from constructor import models
 
 
 
+
 # Create your views here.
 
 class ConstructorEmailView(View):
@@ -20,6 +22,8 @@ class ConstructorEmailView(View):
     def get(self, request):
         args = {}
         args['groups'] = Group.objects.all();
+        # получаем путь до шаблонов
+        args['templates'] = models.Template.objects.all().values('name', 'id')
         return render_to_response(self.template, RequestContext(request, args))
 
 
@@ -31,6 +35,17 @@ class SearchUserAjax(View):
         send_json = json.dumps(result_search)
         return HttpResponse(send_json, content_type='application/json')
 
+# загрузка шаблона письма
+class TemplateLoadAjax(View):
+    def get(self, request, id):
+        # получаем файл
+        t = models.Template.objects.all().get(id=id).html
+
+        # считываем все строки файла.
+        t.open(mode='rb')
+        lines = t.readlines()
+        t.close()
+        return HttpResponse(lines)
 
 
 class FirstTemplateView(View):
@@ -42,10 +57,19 @@ class FirstTemplateView(View):
 
 
 class TemplateRenderer(View):
-    def get(self,request):
-        t = list( models.Template.objects.filter(id=1))[0]
-        template_obj = template.Template(t.html)
-        args = {'title': 'Hello','message':'Hello dude!'}
+    def post(self,request):
+        template_id = request.POST.get('template_id')
+        title = request.POST.get('title')
+        text = request.POST.get('text')
+        url = request.POST.get('video')
+        image = request.FILES['image']
+        print template_id
+
+        t = models.Template.objects.all().get(id=template_id).template
+        template_obj = get_template(t)
+
+        args = {'title': title,'text':text, 'video':url, 'image': image}
         c = RequestContext(request,args)
+        print template_obj.render(c)
         return HttpResponse(template_obj.render(c))
 
