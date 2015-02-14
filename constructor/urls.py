@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from views import ConstructorEmailView,FirstTemplateView
+from views import ConstructorEmailView,FirstTemplateView,TemplateRenderer
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
@@ -14,6 +14,7 @@ urlpatterns = patterns('',
 
     url(r'^email_templates/$', ConstructorEmailView.as_view(), name='email_templates'),
     url(r'^first_template/$', FirstTemplateView.as_view(), name='first_template'),
+    url(r'^render_template/$', TemplateRenderer.as_view(), ),
 )
 
 #http://stackoverflow.com/questions/16196603/images-from-imagefield-in-django-dont-load-in-template

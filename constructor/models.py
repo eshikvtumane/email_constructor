@@ -38,3 +38,4 @@ class EmailToImage(models.Model):
         verbose_name_plural = 'Письма к изображениям'
     email = models.ForeignKey(Email)
     image = models.ForeignKey(Image)
+
