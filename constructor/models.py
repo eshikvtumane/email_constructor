@@ -10,8 +10,7 @@ class Email(models.Model):
 
     email_template = models.ForeignKey('Template')
     title = models.TextField()
-    text = models.Text()
-    image = models.ImageField(upload_to='email_images')
+    text = models.TextField()
     multimedia_link = models.URLField()
 
 class Template(models.Model):
@@ -22,3 +21,20 @@ class Template(models.Model):
 
     name = models.CharField(max_length=200)
     html = models.TextField()
+
+
+class Image(models.Model):
+     class Meta:
+        db_table = 'Images'
+        verbose_name = 'Изображение'
+        verbose_name_plural = 'Изображения'
+
+     image = models.ImageField(upload_to='email_images')
+
+class EmailToImage(models.Model):
+    class Meta:
+        db_table = 'EmailToImage'
+        verbose_name = 'Письмо к изображению'
+        verbose_name_plural = 'Письма к изображениям'
+    email = models.ForeignKey(Email)
+    image = models.ForeignKey(Image)
