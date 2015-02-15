@@ -24,11 +24,12 @@ function userSearch(){
             },
             dataType: 'json',
             success:function(data){
+                console.log('-----------------------');
                 console.log(data);
                 count = 0;
                 result_search = ''
                 while(data[count]){
-                    result_search += '<option value="' + data[count]['id'] + '">' + data[count]['username'] + '</option>';
+                    result_search += '<option value="' + data[count]['id'] + '">' + data[count]['company_name'] + '</option>';
                     count += 1
                 }
 

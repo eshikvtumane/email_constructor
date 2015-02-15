@@ -2,6 +2,7 @@ $(document).ready(function(){
     //http://xdsoft.net/jqplugins/datetimepicker/
     $('#datetimepicker').datetimepicker({
         lang:'ru',
+        step:10
         /*allowTimes:[
           '12:00', '13:00', '15:00',
           '17:00', '17:05', '17:20', '19:00', '20:00'

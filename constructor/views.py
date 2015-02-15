@@ -21,7 +21,8 @@ class ConstructorEmailView(View):
     template = 'email_constructor.html'
     def get(self, request):
         args = {}
-        args['groups'] = Group.objects.all();
+        args['groups'] = models.CompanyGroup.objects.all()
+        args['locations'] = models.Location.objects.all()
         # получаем путь до шаблонов
         args['templates'] = models.Template.objects.all().values('name', 'id')
         return render_to_response(self.template, RequestContext(request, args))
@@ -31,7 +32,7 @@ class ConstructorEmailView(View):
 class SearchUserAjax(View):
     def get(self, request):
         enter_word = request.GET.get('s_word')
-        result_search = list(User.objects.filter(username__contains = enter_word).values('id', 'username'))
+        result_search = list(models.Company.objects.filter(company_name__contains = enter_word).values('id', 'company_name'))
         send_json = json.dumps(result_search)
         return HttpResponse(send_json, content_type='application/json')
 
@@ -62,13 +63,13 @@ class TemplateRenderer(View):
         title = request.POST.get('title')
         text = request.POST.get('text')
         url = request.POST.get('video')
-        image = request.FILES['image']
-        print template_id
+        #image = request.FILES['image']
+        #print template_id
 
         t = models.Template.objects.all().get(id=template_id).template
         template_obj = get_template(t)
 
-        args = {'title': title,'text':text, 'video':url, 'image': image}
+        args = {'title': title,'text':text, 'video':url}
         c = RequestContext(request,args)
         print template_obj.render(c)
         return HttpResponse(template_obj.render(c))

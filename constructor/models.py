@@ -14,6 +14,7 @@ class Email(models.Model):
 
     image = models.ImageField(upload_to='email_images')
     multimedia_link = models.URLField()
+    footer = models.TextField()
 
 class Template(models.Model):
     class Meta:
@@ -42,3 +43,32 @@ class EmailToImage(models.Model):
     email = models.ForeignKey(Email)
     image = models.ForeignKey(Image)
 
+# компании по группам
+class CompanyGroup(models.Model):
+    class Meta:
+        db_table = 'CompanyGroups'
+        verbose_name = 'Группа'
+        verbose_name_plural = 'Группы'
+
+    name = models.CharField(max_length=100)
+
+
+# компании
+class Company(models.Model):
+    class Meta:
+        db_table = 'Companies'
+        verbose_name = 'Фирма'
+        verbose_name_plural = 'Фирмы'
+
+    group = models.ForeignKey('CompanyGroup')
+    location = models.ForeignKey('Location')
+    company_name = models.TextField()
+
+# Местоположение полователя
+class Location(models.Model):
+    class Meta:
+        db_table = 'Locations'
+        verbose_name = 'Местоположение'
+        verbose_name_plural = 'Местоположения'
+
+    name = models.CharField(max_length=100)
