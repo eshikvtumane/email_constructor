@@ -24,7 +24,6 @@ urlpatterns = patterns('',
 # загрузка выбранного шаблона
     url(r'^template_load/(?P<id>[0-9]+)/$', TemplateLoadAjax.as_view()),
 
-    url(r'^first_template/$', FirstTemplateView.as_view(), name='first_template'),
     url(r'^render_template/$', TemplateRenderer.as_view(), name='render_template' ),
 )
 
