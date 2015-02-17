@@ -22,6 +22,7 @@ class Email(models.Model):
     from_email = models.CharField(max_length = 255)
 
 
+
 class Template(models.Model):
     class Meta:
         db_table = 'Templates'
