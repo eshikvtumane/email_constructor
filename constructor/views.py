@@ -1,17 +1,17 @@
 #-*- coding: utf8 -*-
+import json
+import os
 from django.shortcuts import render, render_to_response
 from django.views.generic import View
 from django.template import RequestContext, Context
 from django.template.loader import get_template
 from django.http import HttpResponse
-
-import json
-
 from django.contrib.auth.models import Group, User
-
 from django import template
 from constructor import models
-
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
 
 
 
@@ -63,14 +63,15 @@ class TemplateRenderer(View):
         title = request.POST.get('title')
         text = request.POST.get('text')
         url = request.POST.get('video')
-        #image = request.FILES['image']
-        #print template_id
+        image = request.FILES['image']
+        save_path = default_storage.save('tmp/somename.jpg', ContentFile(image.read()))
+        image_url = os.path.join(settings.MEDIA_ROOT, save_path)
 
         t = models.Template.objects.all().get(id=template_id).template
         template_obj = get_template(t)
 
-        args = {'title': title,'text':text, 'video':url}
+        args = {'title': title,'text':text, 'video':url,'image':image_url}
         c = RequestContext(request,args)
-        print template_obj.render(c)
+
         return HttpResponse(template_obj.render(c))
 
