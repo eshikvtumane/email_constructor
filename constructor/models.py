@@ -33,6 +33,8 @@ class Template(models.Model):
     html = models.FileField(upload_to='html_templates')
     template = models.FileField(upload_to='html_templates')
 
+    def __unicode__(self):
+        return self.name
 
 class Image(models.Model):
     class Meta:
@@ -52,6 +54,8 @@ class CompanyGroup(models.Model):
 
     name = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return self.name
 
 # компании
 class Company(models.Model):
@@ -66,6 +70,10 @@ class Company(models.Model):
 
     company_email = models.CharField(max_length=254)
 
+    def __unicode__(self):
+        return self.company_name
+
+
 # Местоположение полователя
 class Location(models.Model):
     class Meta:
@@ -74,4 +82,5 @@ class Location(models.Model):
         verbose_name_plural = 'Местоположения'
 
     name = models.CharField(max_length=100)
-
+    def __unicode__(self):
+        return self.name
