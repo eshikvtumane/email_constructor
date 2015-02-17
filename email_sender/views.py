@@ -6,7 +6,7 @@ from django.template import Context
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from constructor.models import Email, Template, Image
-from celery import task
+
 
 # Create your views here.
 
@@ -48,7 +48,6 @@ def email_send(request, email_id):
     text_content = 'Hello'
 # генерация html письма
     html_content = html.render(content)
-    print html_content
 
 
     subject = email_parameters.subject
@@ -59,7 +58,4 @@ def email_send(request, email_id):
     #msg.send()
 
     send_mail(subject, html_content, from_email, to, fail_silently=False)
-    print 'rrrr'
-
-    return render(request, 'dffdfd')
 
