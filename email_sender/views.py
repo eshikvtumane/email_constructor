@@ -6,6 +6,7 @@ from django.template import Context
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from constructor.models import Email, Template, Image
+from celery import task
 
 # Create your views here.
 
@@ -61,3 +62,4 @@ def email_send(request, email_id):
     print 'rrrr'
 
     return render(request, 'dffdfd')
+
