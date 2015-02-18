@@ -52,3 +52,7 @@ def email_send(request, email_id):
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
     msg.attach_alternative(html_content, 'text/html')
     #msg.send()
+
+
+def test():
+    print 2+2
