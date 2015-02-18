@@ -17,11 +17,16 @@
 }
 * { font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; }
 
-img { 
-	/*max-width: 100%; */
+img {
+    width: 20ex;
+
+}
+.img_logo{
     height: 80px;
     width: 180px;
-}
+    }
+
+
 .collapse {
 	margin:0;
 	padding:0;
@@ -31,11 +36,13 @@ body {
 	-webkit-text-size-adjust:none; 
 	width: 100%!important; 
 	height: 100%;
-    {% if bg_color %}
-        background-color: #{{ bg_color }};
-    {% endif %}
+
     {% if bg_image %}
-        background-image: url('{{ bg_image }}');
+
+         background-image: url('{{ bg_image }}');
+
+    {% else %}
+        background-color: #{{ bg_color }};
     {% endif %}
 }
 
@@ -69,8 +76,8 @@ p.callout {
 
 table.social {
 /* 	padding:15px; */
-    {% if color1 %}
-	    background-color: #{{ color1 }};
+    {% if footer %}
+	    background-color: #{{ footer }};
     {% else %}
         background-color: #ebebeb;
     {% endif %}
@@ -254,6 +261,10 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	}
 
 }
+.wrap{
+    word-wrap: break-word;
+    width: 40ex;
+    }
 </style>
 
 </head>
@@ -265,13 +276,13 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	<tr>
 		<td></td>
 		<td class="header container" align="">
-			
+
 			<!-- /content -->
 			<div class="content">
 				<table bgcolor="" >
 					<tr>
 						<td>
-							<img src="{{ image1 }}" />
+							<img src="{{ image1 }}" class="img_logo"/>
 						</td>
 						<td align="right">
 							<h6 class="collapse">
@@ -304,14 +315,19 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 						<td class="small" width="20%" style="vertical-align: top; padding-right:10px;">
 							<img src="{{ image2 }}" />
 						</td>
-						<td>
-							{{ text2|safe }}
+						<td style="width: 100%">
+                            <div class="wrap">
+                                {{ text2|safe }}
+                            </div>
+
 						</td>
 					</tr>
 				</table>
 			
 			</div><!-- /content -->
-			
+
+                <hr>
+
 			<!-- content -->
 			<div class="content"><table bgcolor="">
 				<tr>
@@ -319,29 +335,35 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 						<img src="{{ image3|safe }}" />
 					</td>
 					<td>
-						{{ text3 }}
+                        <div class="wrap">
+						    {{ text3|safe }}
+                        </div>
 					</td>
 				</tr>
 			</table></div><!-- /content -->
-						
+<hr>
 			<div class="content"><table bgcolor="">
 				<tr>
 					<td class="small" width="20%" style="vertical-align: top; padding-right:10px;">
 						<img src="{{ image4|safe }}" />
 					</td>
 					<td>
-						{{ text4 }}
+                        <div class="wrap">
+						    {{ text4|safe }}
+                        </div>
 					</td>
 				</tr>
 			</table></div><!-- /content -->
-			
+			<hr>
 			<div class="content"><table bgcolor="">
 				<tr>
 					<td class="small" width="20%" style="vertical-align: top; padding-right:10px;">
 						<img src="{{ image5|safe }}" />
 					</td>
 					<td>
-						{{ text5 }}
+                        <div class="wrap">
+						    {{ text5|safe }}
+                        </div>
 					</td>
 				</tr>
 			</table></div><!-- /content -->
@@ -353,13 +375,13 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 </table><!-- /BODY -->
 
 <!-- FOOTER -->
-<table class="footer-wrap">
+<table class="footer-wrap" bgcolor="#{{ footer }}">
 	<tr>
 		<td></td>
 		<td class="container">
 			
 				<!-- content -->
-				<div class="content" style="background-color: #{{ color1 }};">
+				<div class="content" style="background-color: #{{ footer }};">
 					<!-- social & contact -->
 							<table bgcolor="" class="social" width="100%">
 								<tr>
@@ -370,7 +392,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 											<table bgcolor="" cellpadding="" align="left">
 										<tr>
 											<td>				
-												
+
 												{{ text6|safe }}
 												
 											</td>
@@ -386,12 +408,12 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 												{% if social == 'on' %}
                                                     СОЦ. КНОПКИ
                                                 {% else %}
-												    <img src='{{ image6 }}'>
+												    <img src='{{ image6 }}'  class="img_logo">
                                                 {% endif %}
                 
 											</td>
 										</tr>
-									</table><!-- /column 2 -->	
+									</table><!-- /column 2 -->
 										</div>
 										
 										<div class="clear"></div>

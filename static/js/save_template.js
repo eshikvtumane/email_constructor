@@ -3,12 +3,20 @@ function templateSave(){
 
 
     var subject = document.getElementById('subject').value;
-    var title = document.getElementById('title').value;
-    var text = CKEDITOR.instances.text.getData();
-    //var image = document.getElementById('image');
-    var video = document.getElementById('video').value;
-    var footer = document.getElementById('footer').value; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+    // цвет фона
+    var bg_color = document.getElementById('background-color').value;
+    // картинка для фона
+    var bg_img = document.getElementById('background-image').files[0];
+    // цвет фона шапки
+    var header_color = document.getElementById('head_background-color').value;
+    // картинка для фона шапки
+    var header_img = document.getElementById('head_background-image').value;
+
+    // фон футера
+    var footer = document.getElementById('footer').value; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    var social = document.getElementById('check').checked;
+    console.log(social);
 
     var groups = selectToArray('adding_groups');
     var users = selectToArray('added_users');
@@ -25,18 +33,23 @@ function templateSave(){
         return;
     }
 
-    errors = inputsValidate(subject, title, text, footer)
+    //errors = inputsValidate(subject, title, text, footer)
 
-
-    if(errors.length == 0){
+      len = 0;
+    if(len == 0){
 
         form_data = new FormData();
         form_data.append('temp_id', template_id);
         form_data.append('subject', subject);
-        form_data.append('title', title);
-        form_data.append('text', text);
-        form_data.append('multi_url', video);
+
+
+        form_data.append('background-color', bg_color);
+        form_data.append('background-image', bg_img);
+        form_data.append('head_background-color', header_color);
+        form_data.append('head_background-image', header_img);
+
         form_data.append('footer', footer);
+        form_data.append('social_button', social);
 
         // добавление групп
         form_data.append('groups', JSON.stringify(groups));
@@ -46,22 +59,27 @@ function templateSave(){
         form_data.append('address', datetime);
 
 
-        // добавление шзображений
-        var image_inputs = document.getElementsByTagName('input');
-        inputs_len = image_inputs.length;
+        // добавление изображений
+        var inputs = document.getElementsByName('image');
+        inputs_len = inputs.length;
         for(var i = 0; i < inputs_len; i++) {
-            if(image_inputs[i].type.toLowerCase() == 'file') {
-                form_data.append('images', image_inputs[i].files[0]);
-            }
+            form_data.append('images', inputs[i].files[0]);
+        }
+
+        // добавление текста
+        var text_inputs = document.getElementsByName('text');
+        var inputs_len = text_inputs.length;
+        for(var i = 0; i < inputs_len; i++) {
+            form_data.append('texts', text_inputs[i].value);
         }
 
         // добавление цвета
-        var colors = document.getElementsByName('color[]');
+       /* var colors = document.getElementsByName('color[]');
         colors_len = colors.length;
         for(var i = 0; i < colors_len; i++){
             console.log(colors[i].value);
             form_data.append('colors', colors[i].value);
-        }
+        }*/
 
 
         $.ajax({

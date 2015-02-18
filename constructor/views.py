@@ -72,23 +72,57 @@ class TemplateRenderPreview(View):
 
 
 class TemplateRenderer():
-    def generateTemplate(self, request, request_method, files):
-# выборка всех передыных значений с клиента
+    # работаю с параметрами, которые приходят с сервера, в одном месте
+    def requestParameters(self, request_method, files, dir):
         template_id = request_method.get('template_id')
         footer = request_method.get('footer')
         social_btn = request_method.get('social_button')
 
-        footer_clr = request_method.get('footer_color')
         background_color = request_method.get('background-color')
         head_bg_color = request_method.get('head_background-color')
 
+        fixed_bg = request_method.get('fixed_bg')
         texts = request_method.getlist('text')
 
+        bg_img = self.__image_save(files.getlist('background-image'), dir)
+        header_img = self.__image_save(files.getlist('head_background-image'), dir)
+        print files
+        args = {
+            'template_id': template_id,
+            'footer': footer,
+            'social_btn': social_btn,
+            'background_color': background_color,
+            'head_bg_color': head_bg_color,
+            'fixed_bg': fixed_bg,
+            'texts': texts,
+            'bg_img': bg_img[0],
+            'header_img': header_img[0]
+        }
+        return args
+
+
+
+    def generateTemplate(self, request, request_method, files):
+# выборка всех передыных значений с клиента
+        template_id = request_method.get('template_id')
+        subject = request_method.get('subject')
+        footer = request_method.get('footer')
+        social_btn = request_method.get('social_button')
+
+        background_color = request_method.get('background-color')
+        head_bg_color = request_method.get('head_background-color')
+
+
+        fixed_bg = request_method.get('fixed_bg')
+        texts = request_method.getlist('text')
+
+# растянуть картинку (фон)
+        fixed_bg = request_method.get('fixed_bg')
 
         t = models.Template.objects.all().get(id=template_id).template
         template_obj = get_template(t)
 
-        args = {'footer': footer, 'social': social_btn}
+        args = {'footer': footer, 'social': social_btn, 'fixed_bg': fixed_bg}
 
     # изменение стиля всего письма
         background = self.__backgroundStyle(request.FILES, background_color, 'background-image', 'bg_color', 'bg_image')
@@ -105,7 +139,7 @@ class TemplateRenderer():
 
 
 # Добавление путей к изображениям
-        image_path = self.__image_save(request.FILES.getlist('image'))
+        image_path = self.__image_save(request.FILES.getlist('image'), 'tmp')
         image_count = 1
         for img in image_path:
             img_key = 'image' + str(image_count)
@@ -122,19 +156,19 @@ class TemplateRenderer():
         if color:
             args[key_color] = color
         if img:
-            image_path = self.__image_save(img)
+            image_path = self.__image_save(img, 'tmp')
             args[key_image] = image_path[0]
         return args
 
 
 # сохранение изображений на сервер
-    def __image_save(self, files):
+    def __image_save(self, files, dir):
         arr_path = []
         for f in files:
             image = f
             original_name, file_extension = os.path.splitext(image.name)
             filename = 'tmp_image' + '-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + file_extension
-            save_path = default_storage.save(os.path.join('tmp', filename), ContentFile(image.read()))
+            save_path = default_storage.save(os.path.join(dir, filename), ContentFile(image.read()))
             image_url = os.path.join(settings.MEDIA_URL, save_path)
             arr_path.append(image_url)
         return arr_path
@@ -143,88 +177,92 @@ class TemplateRenderer():
 # сохранение шаблона письма в базу
 class SaveTemplateView(View):
     def post(self, request):
-        try:
-            template_id = request.POST.get('temp_id')
-            subject = request.POST.get('subject')
-            title = request.POST.get('title')
-            text = request.POST.get('text')
-            images = request.POST.get('images')
-            multimedia = request.POST.get('multi_url')
-            footer = request.POST.get('footer')
-            address = request.POST.get('address')
-            colors = request.POST.getlist('colors')
-
-            locations = json.loads(request.POST.get('locations'))
-            groups = json.loads(request.POST.get('groups'))
-            users = json.loads(request.POST.get('users'))
-
-        # переводим дату и время из строки в объект
-            str_datetime = request.POST.get('datetime')
-            datetime_format = datetime.datetime.strptime(str_datetime, '%Y-%m-%d %H:%M')
+        #try:
+        tr = TemplateRenderer()
+        param = tr.requestParameters(request.POST, request.FILES, 'email_images')
 
 
-            template_obj = models.Template.objects.get(pk=template_id)
-            email_obj = models.Email(
-                email_template = template_obj,
-                subject = subject,
-                title = title,
-                text = text,
-                multimedia_link = multimedia,
-                footer = footer,
-                from_email = address
-            )
+        address = request.POST.get('address')
+        locations = json.loads(request.POST.get('locations'))
+        groups = json.loads(request.POST.get('groups'))
+        users = json.loads(request.POST.get('users'))
 
-            email_obj.save()
-
-    # добавление местопложения, групп пользователей и компаний
-            usr_locations = models.Company.objects.filter(location__in = locations)
-            usr_groups = models.Company.objects.filter(group__in = groups)
-            users_obj = models.Company.objects.filter(id__in=users)
-
-            tuple_users_id = Set()
-            print '=' * 40
-            print 'loc', locations
-            print 'gr', groups
-            print 'us', users
-
-            print usr_locations
-            print usr_groups
-            print users_obj
-
-            for usr1, usr2, usr3 in zip(usr_locations, usr_groups, usr_locations):
-                print usr1.company_name, usr2.company_name, usr3.company_name
-                tuple_users_id.add(usr1.id)
-                tuple_users_id.add(usr2.id)
-                tuple_users_id.add(usr3.id)
-
-            users_id = list(tuple_users_id)
-            print users_id
-            print '=' * 40
-            email_obj.users.add(*users_id)
-
-            email_obj.save()
+    # переводим дату и время из строки в объект
+        str_datetime = request.POST.get('datetime')
+        datetime_format = datetime.datetime.strptime(str_datetime, '%Y-%m-%d %H:%M')
 
 
-    # добавление картинки
-            fuv = FileUploadView()
-            images_list = fuv.add_image(request, 'email_images', 'email_picture', email_obj)
+        template_obj = models.Template.objects.get(pk=param['template_id'])
+        email_obj = models.Email(
+            email_template = template_obj,
+            subject = param['subject'],
+            bg_color = param['background_color'],
+            bg_img = param['bg_img'],
 
-            models.Image.objects.bulk_create(images_list)
+            header_color = param['head_bg_color'],
+            header_img = param['header_img'],
 
-    # добавление цвета в базу
-            colors_obj = [models.Color(email = email_obj, color = color) for color in colors]
-            models.Color.objects.bulk_create(colors_obj)
+            footer = param['footer'],
+            social_buttons = param['social_btn'],
+            from_email = address
+        )
 
-    # добавление задачи в расписание
-            #sh = Shedule(email = email_obj, datetime = datetime_format)
-            #sh.save()
+        email_obj.save()
+
+# добавление текста из шаблона
+        texts = param['texts']
+        print texts
+        text_objs = [models.Text(email= email_obj, text = text) for text in texts]
+        models.Text.objects.bulk_create(text_objs)
+# добавление местопложения, групп пользователей и компаний
+        usr_locations = models.Company.objects.filter(location__in = locations)
+        usr_groups = models.Company.objects.filter(group__in = groups)
+        users_obj = models.Company.objects.filter(id__in=users)
+
+        tuple_users_id = Set()
+        print '=' * 40
+        print 'loc', locations
+        print 'gr', groups
+        print 'us', users
+
+        print usr_locations
+        print usr_groups
+        print users_obj
+
+        for usr1, usr2, usr3 in zip(usr_locations, usr_groups, usr_locations):
+            print usr1.company_name, usr2.company_name, usr3.company_name
+            tuple_users_id.add(usr1.id)
+            tuple_users_id.add(usr2.id)
+            tuple_users_id.add(usr3.id)
+
+        users_id = list(tuple_users_id)
+        print users_id
+        print '=' * 40
+        email_obj.users.add(*users_id)
+
+        email_obj.save()
+
+
+# добавление картинки
+        fuv = FileUploadView()
+        images_list = fuv.add_image(request, 'email_images', 'email_picture', email_obj)
+
+        models.Image.objects.bulk_create(images_list)
+
+# добавление цвета в базу
+        colors_obj = [models.Color(email = email_obj, color = color) for color in colors]
+        models.Color.objects.bulk_create(colors_obj)
+
+# добавление задачи в расписание
+        #sh = Shedule(email = email_obj, datetime = datetime_format)
+        #sh.save()
 
 
 
-            return HttpResponse('200', 'text/plain')
+        return HttpResponse('200', 'text/plain')
 
-        except:
-            return HttpResponse('500', 'text/plain')
+        #except:
+            #return HttpResponse('500', 'text/plain')
 
 
 

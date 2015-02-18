@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Template, Location, Company, CompanyGroup, Email, Image, Color
+from models import Template, Location, Company, CompanyGroup, Email, Image
 
 # Register your models here.
 class TemplateAdmin(admin.ModelAdmin):
@@ -33,12 +33,9 @@ class EmailAdmin(admin.ModelAdmin):
     ]
     fields = ['email_template', 'subject', 'title', 'text', 'multimedia_link', 'footer', 'users', 'from_email']
 
-class ColorAdmin(admin.ModelAdmin):
-    fields = [ 'email', 'color']
 
 admin.site.register(Template, TemplateAdmin)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(CompanyGroup, CompanyGroupAdmin)
 admin.site.register(Email, EmailAdmin)
-admin.site.register(Color, ColorAdmin)

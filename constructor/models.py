@@ -10,11 +10,20 @@ class Email(models.Model):
 
     email_template = models.ForeignKey('Template')
     subject = models.CharField(max_length=255)
-    title = models.TextField()
-    text = models.TextField()
 
-    multimedia_link = models.TextField()
-    footer = models.TextField()
+    # цвет фона
+    bg_color = models.CharField(max_length=6, blank=True, null=True)
+    #изображение для фона
+    bg_img = models.FileField(upload_to='email_images', blank=True, null=True)
+
+    # цвет фона header'а
+    header_color = models.CharField(max_length=6, blank=True, null=True)
+    # изображение для фона header'а
+    header_img = models.FileField(upload_to='email_images', blank=True, null=True)
+
+    # фон footer'а
+    footer = models.CharField(max_length = 6, blank=True, null=True)
+    social_buttons = models.CharField(max_length=6, blank=True, null=True)
 
 
     users = models.ManyToManyField('Company', blank=True, null=True)
@@ -22,15 +31,15 @@ class Email(models.Model):
     from_email = models.CharField(max_length = 255)
 
 
-# модель для хранения цветов, используемых в шаблоне
-class Color(models.Model):
+# модель для хранения текстов, содержащихся в письме
+class Text(models.Model):
     class Meta:
-        db_table = 'Colors'
-        verbose_name = 'Цвет блока'
-        verbose_name_plural = 'Цвета блоков'
+        db_table = 'Texts'
+        verbose_name = 'Текст в письме'
+        verbose_name_plural = 'Тексты в письмах'
 
     email = models.ForeignKey('Email')
-    color = models.CharField(max_length = 6)
+    text = models.TextField()
 
 
 class Template(models.Model):

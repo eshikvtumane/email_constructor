@@ -14,7 +14,9 @@
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <!-- datetimepicker -->
     <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker.js' %}"></script>
-    <script src="{% static 'js/ckeditor/ckeditor.js' %}"></script>
+     <!-- text editors -->
+    <script src="{% static 'js/nicedit/nicEdit.js' %}"></script>
+
 
 <!-- http://www.eyecon.ro/colorpicker/ -->
     <link rel="stylesheet" media="screen" type="text/css" href="{% static 'js/colorpicker/css/colorpicker.css' %}" />
@@ -23,7 +25,7 @@
 
 <!--<script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>-->
 
-    <script src="{% static 'js/page_templates_init.js' %}"></script>
+
     <script src="{% static 'js/csrf_ajax.js' %}"></script>
     <script src="{% static 'js/work_with_div.js' %}"></script>
     <script src="{% static 'js/work_with_group.js' %}"></script>
@@ -32,6 +34,7 @@
     <script src="{% static 'js/work_with_location.js' %}"></script>
     <script src="{% static 'js/save_template.js' %}"></script>
     <script src="{% static 'js/load_template.js' %}"></script>
+    <script src="{% static 'js/page_templates_init.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -69,11 +72,17 @@
                                 <div>
                                     <div>
                                         <label>Фон письма (цвет)</label>
-                                        <input type="text" class="color" name="background-color">
+                                        <input type="text" class="color" id="background-color" name="background-color">
                                     </div>
                                     <div>
                                         <label>Фон письма (картинка)</label>
-                                        <input type="file" name="background-image">
+                                        <input type="file" name="background-image" id="background-image" accept="image/*">
+                                        <div>
+                                            <input type="checkbox" id="fixed_check" name="fixed_bg">
+                                            <label for="fixed_check">
+                                                Растянуть картинку
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -82,11 +91,11 @@
                                 <div>
                                     <div>
                                         <label>Фон шапки (цвет)</label>
-                                        <input type="text" class="color" name="head_background-color">
+                                        <input type="text" class="color" id='head_background-color' name="head_background-color">
                                     </div>
                                     <div>
                                         <label>Фон шапки (картинка)</label>
-                                        <input type="file" name="head_background-image">
+                                        <input type="file" name="head_background-image" id="head_background-image" accept="image/*">
                                     </div>
                                 </div>
 
@@ -94,7 +103,7 @@
             <!-- настройка footer -->
                                 <div>
                                     <label>Цвет фона футера</label>
-                                    <input type="text" class="color" name="color[]">
+                                    <input type="text" class="color" id="footer" name="footer">
                                 </div>
 
                             </div>
@@ -121,7 +130,7 @@
                         <div style="height: 3ex;"></div>
 
                         <div class="navigation text-center" style="margin-top:3ex;">
-                            <input type='submit' value='Предпросмотр письма' class="btn btn-primary" id="btn_preview">
+                            <input type='submit' value='Предпросмотр письма' class="btn btn-primary" id="btn_preview" onclick="return previewValidate();">
                             <input type='button' value='Далее' class="btn btn-primary" id="btn_next" onclick="templatePreview()">
                         </div>
                     </form>
