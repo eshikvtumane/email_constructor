@@ -18,6 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 import djcelery
 BROKER_URL = 'django://'
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '6sc3b9r4^9men2)^p5nw&vgote#nf*t_wegkglxq4vm=y19=0-'
 
@@ -74,7 +75,8 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Vladivostok'
+CELERY_TIMEZONE = 'Asia/Vladivostok'
 
 USE_I18N = True
 
