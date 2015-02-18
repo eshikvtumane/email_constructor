@@ -12,3 +12,6 @@ class Shedule(models.Model):
     email = models.ForeignKey(Email)
     datetime = models.DateTimeField()
 
+from djcelery.models import PeriodicTask, IntervalSchedule
+from datetime import datetime
+
