@@ -22,6 +22,8 @@
 
 
 <!--<script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>-->
+
+    <script src="{% static 'js/page_templates_init.js' %}"></script>
     <script src="{% static 'js/csrf_ajax.js' %}"></script>
     <script src="{% static 'js/work_with_div.js' %}"></script>
     <script src="{% static 'js/work_with_group.js' %}"></script>
@@ -42,7 +44,7 @@
                         {% for template in templates %}
                             <div style="wigth: 10%">
                                 <div>
-                                    <a class='button_select' href="#" onclick="return loadTemplate('{{ template.id }}');">+</a>
+                                    <a class='button_select' href="#" onclick="return loadTemplate('{{ template.id }}', '{{ template.html }}');">+</a>
                                 </div>
                                     {{ template.name }}
                             </div>
@@ -56,8 +58,45 @@
                             <h3>Шаблон</h3>
                             <input type="hidden" name="template_id" id="temp_id">
                             <div style="padding-bottom:3ex;">
-                                <label>Тема письма</label>
-                                <input type="text" id="subject" name="subject" class="form-control">
+                                <h3>Настройки шаблона</h3>
+                                <div>
+                                    <label>Тема письма</label>
+                                    <input type="text" id="subject" name="subject" class="form-control">
+                                </div>
+
+
+                                <!-- настройка background -->
+                                <div>
+                                    <div>
+                                        <label>Фон письма (цвет)</label>
+                                        <input type="text" class="color" name="background-color">
+                                    </div>
+                                    <div>
+                                        <label>Фон письма (картинка)</label>
+                                        <input type="file" name="background-image">
+                                    </div>
+                                </div>
+
+
+            <!-- настройка header -->
+                                <div>
+                                    <div>
+                                        <label>Фон шапки (цвет)</label>
+                                        <input type="text" class="color" name="head_background-color">
+                                    </div>
+                                    <div>
+                                        <label>Фон шапки (картинка)</label>
+                                        <input type="file" name="head_background-image">
+                                    </div>
+                                </div>
+
+
+            <!-- настройка footer -->
+                                <div>
+                                    <label>Цвет фона футера</label>
+                                    <input type="text" class="color" name="color[]">
+                                </div>
+
                             </div>
 
 

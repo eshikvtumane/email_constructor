@@ -75,30 +75,28 @@ class TemplateRenderer():
     def generateTemplate(self, request, request_method, files):
 # выборка всех передыных значений с клиента
         template_id = request_method.get('template_id')
-        title = request_method.get('title')
-        text = request_method.get('text')
-        url = request_method.get('video')
         footer = request_method.get('footer')
-        colors = request_method.getlist('color[]')
-        texts = request_method.getlist('text')
+        social_btn = request_method.get('social_button')
 
-        r = request.FILES.getlist('image')
-        image_path = self.__image_save(request.FILES)
+        footer_clr = request_method.get('footer_color')
+        background_color = request_method.get('background-color')
+        head_bg_color = request_method.get('head_background-color')
+
+        texts = request_method.getlist('text')
 
 
         t = models.Template.objects.all().get(id=template_id).template
         template_obj = get_template(t)
 
-        args = {'title': title,'text':text, 'video':url, 'footer': footer}
+        args = {'footer': footer, 'social': social_btn}
 
-        # Добавление цвета
-        color_count = 1
-        for color in colors:
-            key = 'color' + str(color_count)
-            args[key] = color
-            color_count += 1
+    # изменение стиля всего письма
+        background = self.__backgroundStyle(request.FILES, background_color, 'background-image', 'bg_color', 'bg_image')
+        args = dict(args.items() + background.items())
+    # изменение стиля шапки
+        header = self.__backgroundStyle(request.FILES, head_bg_color, 'head_background-image', 'head_bg_color', 'head_bg_image')
+        args = dict(args.items() + header.items())
 
-        # добавление текста
         text_count = 1
         for text in texts:
             key = 'text' + str(text_count)
@@ -107,21 +105,30 @@ class TemplateRenderer():
 
 
 # Добавление путей к изображениям
+        image_path = self.__image_save(request.FILES.getlist('image'))
         image_count = 1
         for img in image_path:
             img_key = 'image' + str(image_count)
             args[img_key] = img
             image_count += 1
-        print args
+
         c = RequestContext(request, args)
         return template_obj.render(c)
-        #return HttpResponse(template_obj.render(c))
+
+# изменение фона в тех блоках, где необходимо выбрать между изображением и цветом
+    def __backgroundStyle(self,files, color, img_name, key_color, key_image):
+        args = {}
+        img = files.getlist(img_name)
+        if color:
+            args[key_color] = color
+        if img:
+            image_path = self.__image_save(img)
+            args[key_image] = image_path[0]
+        return args
+
 
 # сохранение изображений на сервер
-    def __image_save(self, file):
-        print file
-        print type(file)
-        files = file.getlist('image')
+    def __image_save(self, files):
         arr_path = []
         for f in files:
             image = f

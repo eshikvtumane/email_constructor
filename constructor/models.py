@@ -94,3 +94,13 @@ class Location(models.Model):
     name = models.CharField(max_length=100)
     def __unicode__(self):
         return self.name
+
+class Social(models.Model):
+    class Meta:
+        db_table = 'Socials'
+        verbose_name = 'Ссылка на соц. сеть'
+        verbose_name_plural = 'Ссылки на соц. сети'
+
+    name = models.CharField(max_length=30)
+    link = models.TextField()
+    icon = models.FileField(upload_to='social_icons')

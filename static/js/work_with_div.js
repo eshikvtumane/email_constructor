@@ -9,23 +9,19 @@ $(document).ready(function(){
 
     $('#btn_next').click(function(){
     // проверка: существуют ли данные элементы
-        /*try{
-            var subject = document.getElementById('subject').value;
-            var title = document.getElementById('title').value;
-            var text = CKEDITOR.instances.text.getData();
-            var footer = document.getElementById('footer').value; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        }
-        catch(e){
+     /*   load_template_div = document.getElementById('template');
+        console.log('-----------')
+        console.log(type(load_template_div.innerHTML))
+        if(load_template_div.innerHTML == null){
             document.getElementById('errors').innerHTML = 'Выберите шаблон письма';
             return;
         }
-
-        // проверка на пустые значения
-        error_arr = inputsValidate(subject, title, text, footer)
-        len = error_arr.length
 */
-        var len = 0
+        // проверка на пустые значения
+        error_arr = inputsValidate();
+        len = error_arr.length
+
+        //var len = 0
         // если ошибок нет
         if(len == 0){
         // переход на следующий блок
@@ -55,7 +51,7 @@ $(document).ready(function(){
 function inputsValidate(subject, title, text, footer, input_image_name){
     error_arr = new Array();
 
-    if(subject == ''){
+    /*if(subject == ''){
         error_arr.push('Введите тему письма');
     }
     if(title == ''){
@@ -66,12 +62,12 @@ function inputsValidate(subject, title, text, footer, input_image_name){
     }
     if(footer == ''){
         error_arr.push('Заполните футер');
-    }
+    }*/
 
 // валидация изображение
     image_count = 0;
     quantity_count = 0;
-    var image_inputs = document.getElementsByTagName('input');
+    var image_inputs = document.getElementsByName('image');
         inputs_len = image_inputs.length;
         for(var i = 0; i < inputs_len; i++) {
             if(image_inputs[i].type.toLowerCase() == 'file') {
