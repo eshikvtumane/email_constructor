@@ -1,5 +1,5 @@
 #-*- coding: utf8 -*-
-import json
+import json, datetime
 import os
 from django.shortcuts import render, render_to_response
 from django.views.generic import View
@@ -9,13 +9,12 @@ from django.http import HttpResponse
 from django.contrib.auth.models import Group, User
 from django import template
 from constructor import models
-import datetime
 from django.conf import settings
-import os
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
 from sets import Set
+from utils import clear_tmp
 
 from email_sender.models import Shedule
 
@@ -198,71 +197,70 @@ class SaveTemplateView(View):
             subject = param['subject'],
             bg_color = param['background_color'],
             bg_img = param['bg_img'],
-
             header_color = param['head_bg_color'],
             header_img = param['header_img'],
 
             footer = param['footer'],
             social_buttons = param['social_btn'],
             from_email = address
-        )
+             )
+        
+            email_obj.save()
+        
+            # добавление текста из шаблона
+            texts = param['texts']
+            print texts
+            text_objs = [models.Text(email= email_obj, text = text) for text in texts]
+            models.Text.objects.bulk_create(text_objs)
+    # добавление местопложения, групп пользователей и компаний
+            usr_locations = models.Company.objects.filter(location__in = locations)
+            usr_groups = models.Company.objects.filter(group__in = groups)
+            users_obj = models.Company.objects.filter(id__in=users)
 
-        email_obj.save()
+            tuple_users_id = Set()
+            print '=' * 40
+            print 'loc', locations
+            print 'gr', groups
+            print 'us', users
 
-# добавление текста из шаблона
-        texts = param['texts']
-        print texts
-        text_objs = [models.Text(email= email_obj, text = text) for text in texts]
-        models.Text.objects.bulk_create(text_objs)
-# добавление местопложения, групп пользователей и компаний
-        usr_locations = models.Company.objects.filter(location__in = locations)
-        usr_groups = models.Company.objects.filter(group__in = groups)
-        users_obj = models.Company.objects.filter(id__in=users)
+            print usr_locations
+            print usr_groups
+            print users_obj
 
-        tuple_users_id = Set()
-        print '=' * 40
-        print 'loc', locations
-        print 'gr', groups
-        print 'us', users
+            for usr1, usr2, usr3 in zip(usr_locations, usr_groups, usr_locations):
+                print usr1.company_name, usr2.company_name, usr3.company_name
+                tuple_users_id.add(usr1.id)
+                tuple_users_id.add(usr2.id)
+                tuple_users_id.add(usr3.id)
 
-        print usr_locations
-        print usr_groups
-        print users_obj
+            users_id = list(tuple_users_id)
+            print users_id
+            print '=' * 40
+            email_obj.users.add(*users_id)
 
-        for usr1, usr2, usr3 in zip(usr_locations, usr_groups, usr_locations):
-            print usr1.company_name, usr2.company_name, usr3.company_name
-            tuple_users_id.add(usr1.id)
-            tuple_users_id.add(usr2.id)
-            tuple_users_id.add(usr3.id)
-
-        users_id = list(tuple_users_id)
-        print users_id
-        print '=' * 40
-        email_obj.users.add(*users_id)
-
-        email_obj.save()
-
-
-# добавление картинки
-        fuv = FileUploadView()
-        images_list = fuv.add_image(request, 'email_images', 'email_picture', email_obj)
-
-        models.Image.objects.bulk_create(images_list)
-
-# добавление цвета в базу
-        colors_obj = [models.Color(email = email_obj, color = color) for color in colors]
-        models.Color.objects.bulk_create(colors_obj)
-
-# добавление задачи в расписание
-        #sh = Shedule(email = email_obj, datetime = datetime_format)
-        #sh.save()
+            email_obj.save()
 
 
+    # добавление картинки
+            fuv = FileUploadView()
+            images_list = fuv.add_image(request, 'email_images', 'email_picture', email_obj)
 
-        return HttpResponse('200', 'text/plain')
+            models.Image.objects.bulk_create(images_list)
 
-        #except:
-            #return HttpResponse('500', 'text/plain')
+    # добавление цвета в базу
+            colors_obj = [models.Color(email = email_obj, color = color) for color in colors]
+            models.Color.objects.bulk_create(colors_obj)
+
+    # добавление задачи в расписание
+            #sh = Shedule(email = email_obj, datetime = datetime_format)
+            #sh.save()
+
+
+
+            return HttpResponse('200', 'text/plain')
+
+        except:
+            return HttpResponse('500', 'text/plain')
 
 
 

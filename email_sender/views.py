@@ -2,15 +2,16 @@
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.template import Context
-
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from constructor.models import Email, Template, Image
 
 
+
 # Create your views here.
 
 def email_send(request, email_id):
+
     id = email_id
     # получаем письмо, которое необходимо отправить
     email_parameters = Email.objects.get(pk=id)
@@ -57,6 +58,5 @@ def email_send(request, email_id):
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
     msg.attach_alternative(html_content, 'text/html')
     #msg.send()
-
-    send_mail(subject, html_content, from_email, to, fail_silently=False)
+    #send_mail(subject, html_content, from_email, to, fail_silently=False)
 
