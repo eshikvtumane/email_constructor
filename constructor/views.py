@@ -1,5 +1,5 @@
 #-*- coding: utf8 -*-
-import json
+import json, datetime
 import os
 from django.shortcuts import render, render_to_response
 from django.views.generic import View
@@ -9,13 +9,12 @@ from django.http import HttpResponse
 from django.contrib.auth.models import Group, User
 from django import template
 from constructor import models
-import datetime
 from django.conf import settings
-import os
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
 from sets import Set
+from utils import clear_tmp
 
 from email_sender.models import Shedule
 
@@ -204,6 +203,8 @@ class SaveTemplateView(View):
 
             models.Image.objects.bulk_create(images_list)
 
+
+
     # добавление цвета в базу
             colors_obj = [models.Color(email = email_obj, color = color) for color in colors]
             models.Color.objects.bulk_create(colors_obj)
@@ -212,7 +213,8 @@ class SaveTemplateView(View):
             #sh = Shedule(email = email_obj, datetime = datetime_format)
             #sh.save()
 
-
+    #очищаем папку для временных фалов tmp
+            clear_tmp()
 
             return HttpResponse('200', 'text/plain')
 
