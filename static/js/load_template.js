@@ -22,6 +22,9 @@ function loadTemplate(template_id){
 
         });
 
+         //turn all textareas on the page into editors
+         nicEditors.allTextAreas( );
+
     }
 
     ajaxSend(
