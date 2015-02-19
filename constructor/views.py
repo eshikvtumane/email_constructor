@@ -214,7 +214,7 @@ class SaveTemplateView(View):
             #sh.save()
 
     #очищаем папку для временных фалов tmp
-            clear_tmp()
+            clear_tmp.clear_tmp()
 
             return HttpResponse('200', 'text/plain')
 
