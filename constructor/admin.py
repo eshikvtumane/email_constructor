@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Template, Location, Company, CompanyGroup, Email, Image
+from models import Template, Location, Company, CompanyGroup, Email, Image, Social
 
 # Register your models here.
 class TemplateAdmin(admin.ModelAdmin):
@@ -33,9 +33,12 @@ class EmailAdmin(admin.ModelAdmin):
     ]
     fields = []
 
+class SocialAdmin(admin.ModelAdmin):
+    fields = []
 
 admin.site.register(Template, TemplateAdmin)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(CompanyGroup, CompanyGroupAdmin)
 admin.site.register(Email, EmailAdmin)
+admin.site.register(Social, SocialAdmin)

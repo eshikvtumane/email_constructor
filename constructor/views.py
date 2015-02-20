@@ -77,11 +77,26 @@ class TemplateRenderPreview(View):
         #return template_render
 
 
+
+
+
+class TemplateSaveView(View):
+    def get(self, request):
+        tr = TemplateRenderer()
+
+        template_render = tr.websiteParametersSave(request, 'tmp', 'image')
+        return template_render
+
+
+
+
+
+
 class TemplateRenderer():
 
-
-    def databaseParameters(self):
-        pass
+    '''-----------------------------------------------------------
+        websiteParameters
+    -----------------------------------------------------------'''
 
     def websiteParameters(self, request, dir, imgs_name):
         method_obj = request.POST
@@ -89,7 +104,6 @@ class TemplateRenderer():
             method_obj = request.GET
 
         link = {
-            'dir': 'tmp',
             'path': 'http://127.0.0.1:8000/media'
         }
 
@@ -101,6 +115,8 @@ class TemplateRenderer():
         return file
         '''r = self.createResponse('template_email', file)
         return r'''
+
+
 
     def createResponse(self, name_file, file):
             response = HttpResponse(content_type='application/html')
@@ -128,7 +144,7 @@ class TemplateRenderer():
         template_id = request_method.get('temp_id')
         subject = request_method.get('subject')
         footer = request_method.get('footer')
-        social_btn = request_method.get('social_button')
+        social_btn = request_method.get('social_buttons')
 
         bg_color = request_method.get('background-color')
         header_color = request_method.get('head_background-color')
@@ -141,7 +157,6 @@ class TemplateRenderer():
             'email_template': template_id,
             'subject': subject,
             'footer': footer,
-            'social_buttons': social_btn,
             'from_email': from_email
         }
 
@@ -160,9 +175,19 @@ class TemplateRenderer():
             header_img = self.savingImg(header_img_list, dir, path)
             args['header_img'] = header_img[0]
 
+        # социальные кнопки
+        print social_btn
+        if social_btn == 'on':
+            args['social_buttons'] = models.Social.objects.all()
 
         return args, texts
 
+
+    '''
+    -----------------------------------------------------------------
+        generateTemplate
+    ----------------------------------------------------------------------
+    '''
     def generateTemplate(self, request, param, texts, imgs):
 
         t = models.Template.objects.all().get(id=param['email_template']).template
@@ -257,4 +282,49 @@ class SaveTemplateView(View):
 
         except:
             return HttpResponse('500', 'text/plain')
+
+
+
+# формирование шаблона по данным из БД
+class DatabaseGenerateTemplate(TemplateRenderer):
+    def __init__(self, **param):
+        self.databaseParameters(email_obj)
+
+
+    def databaseParameters(self, email_obj):
+        template_id = email_obj.email_template
+        subject = email_obj.subject
+        footer = email_obj.footer
+        social_btn = email_obj.social_buttons
+
+        bg_color = email_obj.bg_color
+        header_color = email_obj.header_color
+
+        from_email = email_obj.from_email
+
+        args = {
+            'email_template': template_id,
+            'subject': subject,
+            'footer': footer,
+            'from_email': from_email
+        }
+
+        bg_img = email_obj.bg_img
+        if(bg_img):
+            args['bg_img'] = bg_img
+
+        if(bg_color):
+            args['bg_color'] = bg_color
+        if(header_color):
+            args['header_color'] = header_color
+
+        header_img = email_obj
+        if(header_img):
+            args['header_img'] = header_img
+
+        # социальные кнопки
+        if social_btn == 'on':
+            args['social_buttons'] = models.Social.objects.all()
+
+        return args
 

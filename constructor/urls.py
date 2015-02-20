@@ -5,7 +5,6 @@ from views import ConstructorEmailView, SearchUserAjax
 
 from views import ConstructorEmailView,FirstTemplateView,TemplateRenderPreview, TemplateLoadAjax, SaveTemplateView
 
-
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
@@ -25,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^template_load/(?P<id>[0-9]+)/$', TemplateLoadAjax.as_view()),
 # сохранение шаблона в БД
     url(r'^save_template/$', SaveTemplateView.as_view()),
+
 
     url(r'^render_template/$', TemplateRenderPreview.as_view(), name='render_template' ),
 )

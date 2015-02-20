@@ -414,11 +414,11 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 										<tr>
 											<td>
 
-												{% if social_buttons == 'on' %}
-                                                    СОЦ. КНОПКИ
-                                                {% else %}
-												    <img src='{{ image6 }}'  class="img_logo">
-                                                {% endif %}
+												{% for s in social_buttons %}
+                                                    <a target="_blank" href="{{ s.link }}"><img src="/media/{{ s.icon }}" style='width: 48px;'></a>
+                                                {% empty %}
+												    <img src='{{ image1 }}'  class="img_logo">
+                                                {% endfor %}
                 
 											</td>
 										</tr>
