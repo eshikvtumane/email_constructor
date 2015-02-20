@@ -14,6 +14,18 @@ $(document).ready(function(){
             $(this).ColorPickerSetColor(this.value);
         })
 
+
+    $(".fancybox").fancybox({
+    helpers:  {
+        thumbs : {
+            width: 50,
+            height: 50
+        }
+    }
+});
+
+
+
 // ---------------------------------------------------
 });
 
