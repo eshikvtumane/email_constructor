@@ -11,7 +11,7 @@ function templateSave(){
     // цвет фона шапки
     var header_color = document.getElementById('head_background-color').value;
     // картинка для фона шапки
-    var header_img = document.getElementById('head_background-image').value;
+    var header_img = document.getElementById('head_background-image').files[0];
 
     // фон футера
     var footer = document.getElementById('footer').value; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -23,7 +23,8 @@ function templateSave(){
     var locations = selectToArray('added_locations');
     var datetime = document.getElementById('datetimepicker').value;
     var address = document.getElementById('address').value;
-
+    console.log(address)
+/*
     if(datetime == ''){
         document.getElementById('error-two').innerHTML = 'Выберите время отправки';
         return;
@@ -32,7 +33,7 @@ function templateSave(){
         document.getElementById('error-two').innerHTML = 'Введите адрес';
         return;
     }
-
+*/
     //errors = inputsValidate(subject, title, text, footer)
 
       len = 0;
@@ -56,7 +57,7 @@ function templateSave(){
         form_data.append('users', JSON.stringify(users));
         form_data.append('locations',JSON.stringify(locations));
         form_data.append('datetime', datetime);
-        form_data.append('address', datetime);
+        form_data.append('address', address);
 
 
         // добавление изображений
