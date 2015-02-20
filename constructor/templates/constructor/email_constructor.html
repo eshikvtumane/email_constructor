@@ -20,6 +20,11 @@
 
 <!-- http://www.eyecon.ro/colorpicker/ -->
     <link rel="stylesheet" media="screen" type="text/css" href="{% static 'js/colorpicker/css/colorpicker.css' %}" />
+    <link rel="stylesheet" media="screen" type="text/css"
+          href="{% static 'js/fancy_box/source/jquery.fancybox.css' %}" />
+
+    <link rel="stylesheet" media="screen" type="text/css"
+          href="{% static 'js/fancy_box/source/helpers/jquery.fancybox-thumbs.css' %}" />
     <script type="text/javascript" src="{% static 'js/colorpicker/js/colorpicker.js' %}"></script>
 
 
@@ -35,6 +40,10 @@
     <script src="{% static 'js/save_template.js' %}"></script>
     <script src="{% static 'js/load_template.js' %}"></script>
     <script src="{% static 'js/page_templates_init.js' %}"></script>
+   <script src="{% static 'js/fancy_box/source/jquery.fancybox.pack.js' %}"></script>
+   <script src="{% static 'js/fancy_box/source/helpers/jquery.fancybox-thumbs.js' %}"></script>
+
+
 {% endblock %}
 
 {% block content %}
@@ -45,11 +54,17 @@
 
                     <div id='select_templates' style="wigth: 100%">
                         {% for template in templates %}
-                            <div style="wigth: 10%">
+                            <div
+                                    style="wigth: 10%;display:inline-block;margin-right:50px">
                                 <div>
-                                    <a class='button_select' href="#" onclick="return loadTemplate('{{ template.id }}', '{{ template.html }}');">+</a>
+                                    <a class="fancybox" rel="group"
+                                       href="/media/newsletter.jpg"><img
+                                            height="100" width="100"
+                                            src="/media/newsletter.jpg" alt="" /></a>
+
                                 </div>
-                                    {{ template.name }}
+                                    <a  href="#" onclick="return loadTemplate('{{ template.id }}', '{{ template.html }}');"> {{ template.name }}</a>
+
                             </div>
                         {% endfor %}
                     </div>
@@ -69,15 +84,18 @@
 
 
                                 <!-- настройка background -->
-                                <div>
-                                    <div>
+
+                               <div class ="row">
+
+                                <div class="col-md-6">
+                                    <div class ="bg-panel-align">
                                         <label>Фон письма (цвет)</label>
                                         <input type="text" class="color" id="background-color" name="background-color">
                                     </div>
-                                    <div>
+                                    <div class ="bg-panel-align">
                                         <label>Фон письма (картинка)</label>
                                         <input type="file" name="background-image" id="background-image" accept="image/*">
-                                        <div>
+                                        <div class ="bg-panel-align" >
                                             <input type="checkbox" id="fixed_check" name="fixed_bg">
                                             <label for="fixed_check">
                                                 Растянуть картинку
@@ -88,20 +106,20 @@
 
 
             <!-- настройка header -->
-                                <div>
-                                    <div>
+                                <div col-md-6>
+                                    <div class ="bg-panel-align">
                                         <label>Фон шапки (цвет)</label>
                                         <input type="text" class="color" id='head_background-color' name="head_background-color">
                                     </div>
-                                    <div>
+                                    <div class ="bg-panel-align">
                                         <label>Фон шапки (картинка)</label>
                                         <input type="file" name="head_background-image" id="head_background-image" accept="image/*">
                                     </div>
                                 </div>
 
-
+                                </div>
             <!-- настройка footer -->
-                                <div>
+                                <div class ="bg-panel-align" >
                                     <label>Цвет фона футера</label>
                                     <input type="text" class="color" id="footer" name="footer">
                                 </div>
