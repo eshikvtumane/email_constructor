@@ -63,7 +63,6 @@ class Company(models.Model):
     group = models.ForeignKey('CompanyGroup')
     location = models.ForeignKey('Location')
     company_name = models.TextField()
-
     company_email = models.CharField(max_length=254)
 
 # Местоположение полователя
