@@ -272,12 +272,16 @@ class DatabaseGenerateTemplate(TemplateRenderer):
         self.email_id = email_id
         self.email_obj = models.Email.objects.get(pk=email_id)
 
-    def getEmails(self):
+    def getEmailParameters(self):
         """ Получнение адресов для рассылки"""
         email_obj = self.email_obj
         emails_list = email_obj.users.values('company_email')
         emails = [ d['company_email'] for d in emails_list]
-        return emails
+
+        subject = email_obj.subject
+        from_email = email_obj.from_email
+        print emails_list
+        return emails, subject, from_email
 
 
     def databaseTemplate(self):

@@ -18,9 +18,9 @@ def email_send(request, email_id):
     # получение объкта выбранного письма
     dgt = DatabaseGenerateTemplate(id)
     email_template = dgt.databaseTemplate()
-    email_list = dgt.getEmails()
+    email_list, subject, from_email = dgt.getEmailParameters()
 
-    print email_list
+    print email_list, subject, from_email
 
     return HttpResponse(email_template)
 
