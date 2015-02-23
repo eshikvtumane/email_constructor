@@ -1,7 +1,9 @@
 .idea
 .idea/workspace.xml
+workspace.xml
 .git/*
 *.pyc
+email_constructor/__init__.pyc
 __pycache__
 db.sqlite3
 migrations
