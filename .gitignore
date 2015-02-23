@@ -1,6 +1,6 @@
 .idea
 .idea/workspace.xml
-workspace.xml
+**/.idea/workspace.xml
 .git/*
 *.pyc
 email_constructor/__init__.pyc
