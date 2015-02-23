@@ -1,29 +1,12 @@
-function loadTemplate(template_id){
-    //document.getElementById('template').innerHTML = '<object type="text/html" data="/media/' + template_url + '"></object>';
+function loadTemplate(template_id, template_path){
+
     document.getElementById('temp_id').value = template_id;
+    //$('#template').load('/media/' + template_path);
 
     function_load = function(data){
         document.getElementById('template').innerHTML = data;
-
-        CKEDITOR.replace('text', {
-        language: 'ru'});
-        CKEDITOR.config.extraPlugins = 'justify';
-
-        $('.color').ColorPicker({
-
-            onSubmit: function(hsb, hex, rgb, el) {
-                $(el).val(hex);
-                $(el).ColorPickerHide();
-            },
-            onBeforeShow: function () {
-                $(this).ColorPickerSetColor(this.value);
-            }
-        })
-        .bind('keyup', function(){
-            $(this).ColorPickerSetColor(this.value);
-
-        });
-
+         //turn all textareas on the page into editors
+           nicEditors.allTextAreas( );
     }
 
     ajaxSend(
@@ -49,4 +32,14 @@ function ajaxSend(method_type, template_url, data, function_success){
 
 function templatePreview(){
     console.log(document.getElementById('title'));
+}
+
+function previewValidate(){
+    id_template = document.getElementById('temp_id').value;
+    if(id_template == ''){
+
+        document.getElementById('errors').innerHTML = 'Выберите шаблон собщения';
+        return false;
+    }
+    return true;
 }

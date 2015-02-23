@@ -1,9 +1,13 @@
 from django.contrib import admin
-from models import Template, Location, Company, CompanyGroup, Email, Image
+from models import Template, Location, Company, CompanyGroup, Email, Image, Social, Text
 
 # Register your models here.
 class TemplateAdmin(admin.ModelAdmin):
     fields = ['name', 'html', 'template']
+
+
+class TextInline(admin.StackedInline):
+    model = Text
 
 class CompanyInline(admin.StackedInline):
     model = Company
@@ -29,14 +33,17 @@ class ImageInline(admin.StackedInline):
 
 class EmailAdmin(admin.ModelAdmin):
     inlines = [
-        ImageInline
+        ImageInline,
+        TextInline
     ]
-    fields = ['email_template', 'subject', 'title', 'text', 'multimedia_link', 'footer', 'users', 'from_email']
+    fields = []
 
-
+class SocialAdmin(admin.ModelAdmin):
+    fields = []
 
 admin.site.register(Template, TemplateAdmin)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(CompanyGroup, CompanyGroupAdmin)
 admin.site.register(Email, EmailAdmin)
+admin.site.register(Social, SocialAdmin)

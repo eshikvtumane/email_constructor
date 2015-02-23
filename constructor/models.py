@@ -10,17 +10,37 @@ class Email(models.Model):
 
     email_template = models.ForeignKey('Template')
     subject = models.CharField(max_length=255)
-    title = models.TextField()
-    text = models.TextField()
 
-    multimedia_link = models.TextField()
-    footer = models.TextField()
+    # цвет фона
+    bg_color = models.CharField(max_length=6, blank=True, null=True)
+    #изображение для фона
+    bg_img = models.FileField(upload_to='email_images', blank=True, null=True)
+
+    # цвет фона header'а
+    header_color = models.CharField(max_length=6, blank=True, null=True)
+    # изображение для фона header'а
+    header_img = models.FileField(upload_to='email_images', blank=True, null=True)
+
+    # фон footer'а
+    footer = models.CharField(max_length = 6, blank=True, null=True)
+    social_buttons = models.CharField(max_length=6, blank=True, null=True)
 
 
     users = models.ManyToManyField('Company', blank=True, null=True)
 
     from_email = models.CharField(max_length = 255)
+    domain_name = models.TextField()
 
+
+# модель для хранения текстов, содержащихся в письме
+class Text(models.Model):
+    class Meta:
+        db_table = 'Texts'
+        verbose_name = 'Текст в письме'
+        verbose_name_plural = 'Тексты в письмах'
+
+    email = models.ForeignKey('Email')
+    text = models.TextField()
 
 
 class Template(models.Model):
@@ -33,6 +53,8 @@ class Template(models.Model):
     html = models.FileField(upload_to='html_templates')
     template = models.FileField(upload_to='html_templates')
 
+    def __unicode__(self):
+        return self.name
 
 class Image(models.Model):
     class Meta:
@@ -52,6 +74,8 @@ class CompanyGroup(models.Model):
 
     name = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return self.name
 
 # компании
 class Company(models.Model):
@@ -65,6 +89,10 @@ class Company(models.Model):
     company_name = models.TextField()
     company_email = models.CharField(max_length=254)
 
+    def __unicode__(self):
+        return self.company_name
+
+
 # Местоположение полователя
 class Location(models.Model):
     class Meta:
@@ -73,4 +101,15 @@ class Location(models.Model):
         verbose_name_plural = 'Местоположения'
 
     name = models.CharField(max_length=100)
+    def __unicode__(self):
+        return self.name
 
+class Social(models.Model):
+    class Meta:
+        db_table = 'Socials'
+        verbose_name = 'Ссылка на соц. сеть'
+        verbose_name_plural = 'Ссылки на соц. сети'
+
+    name = models.CharField(max_length=30)
+    link = models.TextField()
+    icon = models.FileField(upload_to='social_icons')

@@ -15,7 +15,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-
+import djcelery
+BROKER_URL = 'django://'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '6sc3b9r4^9men2)^p5nw&vgote#nf*t_wegkglxq4vm=y19=0-'
 
@@ -38,6 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'constructor',
     'email_sender',
+    'djcelery',
+    'kombu.transport.django'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,6 +57,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'email_constructor.urls'
 
 WSGI_APPLICATION = 'email_constructor.wsgi.application'
+
 
 
 # Database
@@ -69,7 +75,8 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Vladivostok'
+CELERY_TIMEZONE = 'Asia/Vladivostok'
 
 USE_I18N = True
 
@@ -92,3 +99,4 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+djcelery.setup_loader()

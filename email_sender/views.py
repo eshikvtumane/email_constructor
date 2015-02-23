@@ -2,62 +2,25 @@
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.template import Context
-
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
-from constructor.models import Email, Template, Image
+from constructor.models import Email, Template, Image, Text
+from django.http import HttpResponse
+from constructor.views import DatabaseGenerateTemplate
+
+
 
 # Create your views here.
 
 def email_send(request, email_id):
+
     id = email_id
-    # получаем письмо, которое необходимо отправить
-    email_parameters = Email.objects.get(pk=id)
+    # получение объкта выбранного письма
+    dgt = DatabaseGenerateTemplate(id)
+    email_template = dgt.databaseTemplate()
+    email_list = dgt.getEmails()
 
-    # получаем ссылку на шаблон
-    email_template = Template.objects.get(id=email_parameters.email_template.id).template
+    print email_list
 
-    html = get_template(email_template)
-    args = {
-        'title': email_parameters.title,
-        'text': email_parameters.text,
-        'video': email_parameters.multimedia_link
-    }
-# получаем изображения для письма
-    images = Image.objects.filter(email=email_parameters).values('picture')
-    print images
-    img_count = 1
-    for img in images:
-        key = 'image' + str(img_count)
-        print img['picture']
-        args[key] = img['picture']
-        img_count += 1
+    return HttpResponse(email_template)
 
-    print args
-
-# Получнение адресов для рассылки
-    emails_list = email_parameters.users.values('company_email')
-    emails = [ d['company_email'] for d in emails_list]
-
-
-# генератор шаблона
-    content = Context(args)
-# генерация простого текста на случай, есди просмоторщик не сможет распознать наше письмо
-    #text_content = plaintext.render(content)
-    text_content = 'Hello'
-# генерация html письма
-    html_content = html.render(content)
-    print html_content
-
-
-    subject = email_parameters.subject
-    from_email = email_parameters.from_email
-    to = emails
-    msg = EmailMultiAlternatives(subject, text_content, from_email, to)
-    msg.attach_alternative(html_content, 'text/html')
-    #msg.send()
-
-    send_mail(subject, html_content, from_email, to, fail_silently=False)
-    print 'rrrr'
-
-    return render(request, 'dffdfd')

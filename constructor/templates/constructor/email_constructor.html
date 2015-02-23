@@ -14,14 +14,23 @@
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <!-- datetimepicker -->
     <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker.js' %}"></script>
-    <script src="{% static 'js/ckeditor/ckeditor.js' %}"></script>
+     <!-- text editors -->
+    <script src="{% static 'js/nicedit/nicEdit.js' %}"></script>
+
 
 <!-- http://www.eyecon.ro/colorpicker/ -->
     <link rel="stylesheet" media="screen" type="text/css" href="{% static 'js/colorpicker/css/colorpicker.css' %}" />
+    <link rel="stylesheet" media="screen" type="text/css"
+          href="{% static 'js/fancy_box/source/jquery.fancybox.css' %}" />
+
+    <link rel="stylesheet" media="screen" type="text/css"
+          href="{% static 'js/fancy_box/source/helpers/jquery.fancybox-thumbs.css' %}" />
     <script type="text/javascript" src="{% static 'js/colorpicker/js/colorpicker.js' %}"></script>
 
 
 <!--<script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>-->
+
+
     <script src="{% static 'js/csrf_ajax.js' %}"></script>
     <script src="{% static 'js/work_with_div.js' %}"></script>
     <script src="{% static 'js/work_with_group.js' %}"></script>
@@ -30,24 +39,32 @@
     <script src="{% static 'js/work_with_location.js' %}"></script>
     <script src="{% static 'js/save_template.js' %}"></script>
     <script src="{% static 'js/load_template.js' %}"></script>
+    <script src="{% static 'js/page_templates_init.js' %}"></script>
+   <script src="{% static 'js/fancy_box/source/jquery.fancybox.pack.js' %}"></script>
+   <script src="{% static 'js/fancy_box/source/helpers/jquery.fancybox-thumbs.js' %}"></script>
+
+
 {% endblock %}
 
 {% block content %}
     <div>
 
 			<div class="container">
-				<div id="email" class="well well-lg" style="padding-bottom:3ex;">
+				<div id="email" class="well well-lg">
 
-                    <div id='select_templates' style="width: 100%;">
+                    <div id='select_templates' style="wigth: 100%">
                         {% for template in templates %}
-                            <div style="width: 10%;">
+                            <div
+                                    style="wigth: 10%;display:inline-block;margin-right:50px">
                                 <div>
-                                    <a href="#" class='button_select' onclick="return loadTemplate('{{ template.id }}');">+</a>
+                                    <a class="fancybox" rel="group"
+                                       href="/media/newsletter.jpg"><img
+                                            height="100" width="100"
+                                            src="/media/newsletter.jpg" alt="" /></a>
 
                                 </div>
-                                <div align="center">
-                                    {{ template.name }}
-                                </div>
+                                    <a  href="#" onclick="return loadTemplate('{{ template.id }}', '{{ template.html }}');"> {{ template.name }}</a>
+
                             </div>
                         {% endfor %}
                     </div>
@@ -56,28 +73,87 @@
                     <form action="/constructor/render_template/" method="post" target="_blank" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="col-sm-12" style="padding-bottom:3ex;">
-
                             <h3>Шаблон</h3>
-                            <input type="hidden" name="template_id" id="temp_id">
+                            <input type="hidden" name="temp_id" id="temp_id">
                             <div style="padding-bottom:3ex;">
-                                <label>Тема письма</label>
-                                <input type="text" id="subject" name="subject" class="form-control">
+                                <h3>Настройки шаблона</h3>
+                                <div>
+                                    <label>Тема письма</label>
+                                    <input type="text" id="subject" name="subject" class="form-control">
+                                </div>
+
+
+                                <!-- настройка background -->
+
+                               <div class ="row">
+
+                                    <div class="col-md-6">
+                                        <fieldset>
+                                            <div class ="bg-panel-align">
+                                                <label>Фон письма (цвет)</label>
+                                                <input type="text" class="color" id="background-color" name="background-color">
+                                            </div>
+                                            <div class ="bg-panel-align">
+                                                <label>Фон письма (картинка)</label>
+                                                <input type="file" name="background-image" id="background-image" accept="image/*">
+                                                <div class ="bg-panel-align" >
+                                                    <input type="checkbox" id="fixed_check" name="fixed_bg">
+                                                    <label for="fixed_check">
+                                                        Растянуть картинку
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+
+
+                <!-- настройка header -->
+                                   <div style="col-md-6">
+                                       <div>
+                                            <div class ="bg-panel-align">
+                                                <label>Фон шапки (цвет)</label>
+                                                <input type="text" class="color" id='head_background-color' name="head_background-color">
+                                            </div>
+                                            <div class ="bg-panel-align">
+                                                <label>Фон шапки (картинка)</label>
+                                                <input type="file" name="head_background-image" id="head_background-image" accept="image/*">
+                                            </div>
+                                        </div>
+                                   </div>
+
+
+                                </div>
+
+
+            <!-- настройка footer -->
+                                <div class =" col-sm-6 bg-panel-align" >
+                                    <label>Цвет фона футера</label>
+                                    <input type="text" class="color" id="footer" name="footer">
+                                </div>
+
+
+                                <div class ="bg-panel-align">
+                                    <input type="checkbox" id="check" name="social_buttons"/>
+                                    <label for="check">Кнопки на соц. сети</label>
+                                </div>
+
                             </div>
 
 
                             <div id='template' class="col-sm-12 padding-elem">
 
                             </div>
+
                         </div>
 
-<!--
+
                         <div class="col-sm-6" style="display: none">
                             <h3>Предпросмотр</h3>
                             <div id='preview' class="col-sm-10">
 
                             </div>
                         </div>
--->
+
                         <div id="errors" class="padding-elem">
 
                         </div>
@@ -85,7 +161,7 @@
                         <div style="height: 3ex;"></div>
 
                         <div class="navigation text-center" style="margin-top:3ex;">
-                            <input type='submit' value='Предпросмотр письма' class="btn btn-primary" id="btn_preview">
+                            <input type='submit' value='Предпросмотр письма' class="btn btn-primary" id="btn_preview" onclick="return previewValidate();">
                             <input type='button' value='Далее' class="btn btn-primary" id="btn_next" onclick="templatePreview()">
                         </div>
                     </form>
@@ -237,6 +313,8 @@
                     <div id="navigation text-center padding-elem">
                         <input type='button' value='Назад' class="btn btn-primary" id="btn_back" class="btn btn-primary">
                         <input type='button' value='Создать письмо' class="btn btn-primary" onclick="templateSave();" class="btn btn-primary">
+
+
                     </div>
 				</div>
 			</div>
