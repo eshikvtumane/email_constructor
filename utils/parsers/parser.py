@@ -1,59 +1,62 @@
 from bs4 import BeautifulSoup
 
-html = open("template1_1.html","r")
+class Parser():
+    def __init__(self,template):
+        self.html = template
+        self.template1_out = "generated_templates/template1.html"
+        self.template2_out = "generated_templates/template2.html"
 
 
-def template2():
-    soup = BeautifulSoup(html.read())
-    images = soup.findAll("img",{"class":"image"})
-    count = 1
-    for image in images:
-        image["src"] = "{{image" + str(count) + "}}"
-        print image
-        count += 1
+    def generateTemplates(self):
+        self.__generateTemplate1(self.html,self.template1_out)
+        self.__generateTemplate2(self.html,self.template2_out)
 
 
-    count = 1
-    text_fields = soup.findAll("div",{"class":"text"})
-    for text in text_fields:
-        text.insert(0,"{{text" + str(count) + "}}")
-        print text
-        count += 1
+    def __generateTemplate1(self,html,template1_out):
+        with open(html,"r") as html:
+            soup = BeautifulSoup(html.read())
+            images = soup.findAll("img",{"class":"image"})
+            count = 1
+            for image in images:
+                new_tag = soup.new_tag("input",type="file")
+                new_tag["name"] = "image"
+                image.replaceWith(new_tag)
+                count += 1
+
+            text_fields = soup.findAll("div",{"class":"text"})
+            count = 1
+            for text in text_fields:
+                new_tag = soup.new_tag("textarea")
+                new_tag["name"] = "text"
+                text.insert(0,new_tag)
+                count += 1
+
+            with open(template1_out,"w") as template1_out:
+                template1_out.write(soup.prettify().encode("utf8"))
 
 
-def template1():
+    def __generateTemplate2(self,html,template2_out):
 
-    soup = BeautifulSoup(html.read())
-    images = soup.findAll("img",{"class":"image"})
-    new_tag = soup.new_tag("p")
+        with open(html,"r") as html:
+            soup = BeautifulSoup(html.read())
+            images = soup.findAll("img",{"class":"image"})
+            count = 1
+            for image in images:
+                image["src"] = "{{%s%d}}"%("image",count)
+                count += 1
 
-    count = 1
-    for image in images:
-
-        image.parent.img.replace_with(new_tag)
-
-        count += 1
-    print soup.prettify()
-#template1()
-
-# <a href="http://example.com/">I linked to <b>example.net</b></a>
-
-
-    # count = 1
-    # text_fields = soup.findAll("div",{"class":"text"})
-    # for text in text_fields:
-    #     text.insert(0,"{{text" + str(count) + "}}")
-    #     print text
-    #     count += 1
+            text_fields = soup.findAll("div",{"class":"text"})
+            count = 1
+            for text in text_fields:
+                text.insert(0,"{{%s%d}}"%("text",count))
+                count += 1
+            with open(template2_out,"w") as template2_out:
+                template2_out.write(soup.prettify().encode("utf8"))
 
 
+# parser =Parser("template1_1.html")
+# parser.generateTemplates()
 
-
-
-
-
-# new_html = open("template_new.html","w")
-# new_html.write(soup.prettify().encode("utf8"))
 
 
 

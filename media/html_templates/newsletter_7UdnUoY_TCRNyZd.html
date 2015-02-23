@@ -394,7 +394,18 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 											<table bgcolor="" cellpadding="" align="left">
 										<tr>
 											<td>
-												<h4>Логотип или социальные кнопки</h4>
+												<div class="file-input-wrapper">
+                                                    <button class="btn-file-input" id="btn6">
+                                                        <label id='label6'>LOGO</label>
+                                                    </button>
+                                                    <input type="file" name="image" accept="image/*" onchange='getImage(this, 6)'/>
+                                                </div>
+
+                                                <div>
+                                                    <input type="checkbox" id="check" name="social_buttons"/>
+                                                    <label for="check">Кнопки на соц. сети</label>
+                                                </div>
+
 											</td>
 										</tr>
 									</table><!-- /column 2 -->	
