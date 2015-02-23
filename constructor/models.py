@@ -29,6 +29,7 @@ class Email(models.Model):
     users = models.ManyToManyField('Company', blank=True, null=True)
 
     from_email = models.CharField(max_length = 255)
+    domain_name = models.TextField()
 
 
 # модель для хранения текстов, содержащихся в письме
@@ -86,7 +87,6 @@ class Company(models.Model):
     group = models.ForeignKey('CompanyGroup')
     location = models.ForeignKey('Location')
     company_name = models.TextField()
-
     company_email = models.CharField(max_length=254)
 
     def __unicode__(self):

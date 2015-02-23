@@ -50,7 +50,7 @@ function templateSave(){
         form_data.append('head_background-image', header_img);
 
         form_data.append('footer', footer);
-        form_data.append('social_button', social);
+        form_data.append('social_buttons', social);
 
         // добавление групп
         form_data.append('groups', JSON.stringify(groups));
@@ -71,7 +71,7 @@ function templateSave(){
         var text_inputs = document.getElementsByName('text');
         var inputs_len = text_inputs.length;
         for(var i = 0; i < inputs_len; i++) {
-            form_data.append('texts', text_inputs[i].value);
+            form_data.append('text', text_inputs[i].value);
         }
 
         // добавление цвета

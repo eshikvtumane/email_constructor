@@ -18,12 +18,9 @@ from utils import clear_tmp
 
 from email_sender.models import Shedule
 
-
-import base64
-
-import cStringIO
+from django.contrib.sites.models import get_current_site
 # Create your views here.
-import base64
+
 
 
 class ConstructorEmailView(View):
@@ -69,25 +66,10 @@ class FirstTemplateView(View):
 # генерирование шаблона для предварительного шаблона
 class TemplateRenderPreview(View):
     def post(self, request):
-        tr = TemplateRenderer()
-        #template_render = tr.generateTemplate(request, request.POST, request.FILES)
+        tr = TemplateRenderer(request=request, dir='/media')
 
         template_render = tr.websiteParameters(request, 'tmp', 'image')
         return HttpResponse(template_render)
-        #return template_render
-
-
-
-
-
-class TemplateSaveView(View):
-    def get(self, request):
-        tr = TemplateRenderer()
-
-        template_render = tr.websiteParametersSave(request, 'tmp', 'image')
-        return template_render
-
-
 
 
 
@@ -97,6 +79,10 @@ class TemplateRenderer():
     '''-----------------------------------------------------------
         websiteParameters
     -----------------------------------------------------------'''
+    def __init__(self, request, dir=''):
+         self.url = 'http://' + get_current_site(request).domain + dir
+         print  self.url
+
 
     def websiteParameters(self, request, dir, imgs_name):
         method_obj = request.POST
@@ -104,26 +90,17 @@ class TemplateRenderer():
             method_obj = request.GET
 
         link = {
-            'path': 'http://127.0.0.1:8000/media'
+            'path': self.url,
+            'dir': dir
         }
+
 
         arr = self.savingImg(request.FILES.getlist(imgs_name), **link)
         param, texts = self.requestParameters(method_obj, request.FILES, **link)
 
 
-        file = self.generateTemplate(request, param, texts, arr)
+        file = self.generateTemplate(param, texts, arr)
         return file
-        '''r = self.createResponse('template_email', file)
-        return r'''
-
-
-
-    def createResponse(self, name_file, file):
-            response = HttpResponse(content_type='application/html')
-            response['Content_Disposition'] = 'attachment; filename=%s.html' % name_file
-            response.write(file)
-            print response
-            return response
 
 # сохранение изображений на сервер
     def savingImg(self, files, dir = 'tmp', path=settings.MEDIA_URL):
@@ -131,8 +108,8 @@ class TemplateRenderer():
         for image in files:
             original_name, file_extension = os.path.splitext(image.name)
 
-            #filename = original_name + '-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + file_extension
-            filename = original_name + file_extension
+            filename = original_name + '-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + file_extension
+
             save_path = default_storage.save(os.path.join(dir, filename), ContentFile(image.read()))
             image_url = os.path.join(path, save_path)
             arr_path.append(image_url)
@@ -157,7 +134,8 @@ class TemplateRenderer():
             'email_template': template_id,
             'subject': subject,
             'footer': footer,
-            'from_email': from_email
+            'from_email': from_email,
+            'domain_name': self.url
         }
 
         bg_img_list = files.getlist('background-image')
@@ -176,9 +154,14 @@ class TemplateRenderer():
             args['header_img'] = header_img[0]
 
         # социальные кнопки
-        print social_btn
         if social_btn == 'on':
-            args['social_buttons'] = models.Social.objects.all()
+            social_obj = models.Social.objects.all()
+            for s in social_obj:
+                s.icon = '/'.join([path, s.icon.name])
+
+                args['social_buttons'] = social_obj
+        if social_btn == u'true':
+            args['social_buttons'] = 'on'
 
         return args, texts
 
@@ -188,8 +171,7 @@ class TemplateRenderer():
         generateTemplate
     ----------------------------------------------------------------------
     '''
-    def generateTemplate(self, request, param, texts, imgs):
-
+    def generateTemplate(self, param, texts, imgs):
         t = models.Template.objects.all().get(id=param['email_template']).template
         template_obj = get_template(t)
 
@@ -208,7 +190,7 @@ class TemplateRenderer():
             param[img_key] = img
             image_count += 1
 
-        c = RequestContext(request, param)
+        c = Context(param)
         return template_obj.render(c)
 
 
@@ -230,7 +212,7 @@ class TemplateRenderer():
 class SaveTemplateView(View):
     def post(self, request):
         try:
-            tr = TemplateRenderer()
+            tr = TemplateRenderer(request)
             param, texts = tr.requestParameters(request.POST, request.FILES, 'email_images')
 
             locations = json.loads(request.POST.get('locations'))
@@ -245,10 +227,8 @@ class SaveTemplateView(View):
             param['email_template'] = models.Template.objects.get(pk=param['email_template'])
             email_obj = models.Email.objects.create(**param)
 
-
+            print request.POST
             # добавление текста из шаблона
-            texts = texts
-            print texts
             text_objs = [models.Text(email= email_obj, text = text) for text in texts]
             models.Text.objects.bulk_create(text_objs)
 
@@ -287,12 +267,41 @@ class SaveTemplateView(View):
 
 # формирование шаблона по данным из БД
 class DatabaseGenerateTemplate(TemplateRenderer):
-    def __init__(self, **param):
-        self.databaseParameters(email_obj)
+    def __init__(self, email_id):
+        self.dir = '/media'
+        self.email_id = email_id
+        self.email_obj = models.Email.objects.get(pk=email_id)
+
+    def getEmailParameters(self):
+        """ Получнение адресов для рассылки"""
+        email_obj = self.email_obj
+        emails_list = email_obj.users.values('company_email')
+        emails = [ d['company_email'] for d in emails_list]
+
+        subject = email_obj.subject
+        from_email = email_obj.from_email
+        print emails_list
+        return emails, subject, from_email
 
 
-    def databaseParameters(self, email_obj):
-        template_id = email_obj.email_template
+    def databaseTemplate(self):
+        email_id = self.email_id
+        email_obj = self.email_obj
+
+
+        email_param = self.valueToDict(email_obj)
+
+        texts_dict = models.Text.objects.filter(email=email_obj).values('text')
+        texts = [t['text'] for t in texts_dict]
+
+        imgs_dict = models.Image.objects.filter(email=email_obj).values('picture')
+        imgs = [ email_param['domain_name']+img['picture'] for img in imgs_dict]
+        template = self.generateTemplate(email_param, texts, imgs)
+
+        return template
+
+    def valueToDict(self, email_obj):
+        template_id = email_obj.email_template.id
         subject = email_obj.subject
         footer = email_obj.footer
         social_btn = email_obj.social_buttons
@@ -306,25 +315,33 @@ class DatabaseGenerateTemplate(TemplateRenderer):
             'email_template': template_id,
             'subject': subject,
             'footer': footer,
-            'from_email': from_email
+            'from_email': from_email,
+            'domain_name': email_obj.domain_name
         }
 
-        bg_img = email_obj.bg_img
+        bg_img = email_obj.bg_img.name
         if(bg_img):
+            bg_img = os.path.join(email_obj.domain_name, 'media', bg_img)
             args['bg_img'] = bg_img
+            print args['bg_img']
 
         if(bg_color):
             args['bg_color'] = bg_color
-        if(header_color):
+        if(header_color) :
             args['header_color'] = header_color
 
-        header_img = email_obj
+
+        header_img = email_obj.header_img.name
         if(header_img):
+            header_img = os.path.join(email_obj.domain_name, 'media', header_img)
             args['header_img'] = header_img
 
         # социальные кнопки
         if social_btn == 'on':
-            args['social_buttons'] = models.Social.objects.all()
+            social_obj = models.Social.objects.all()
+            for s in social_obj:
+                s.icon = '/'.join([email_obj.domain_name, 'media', s.icon.name])
 
+            args['social_buttons'] = social_obj
         return args
 
