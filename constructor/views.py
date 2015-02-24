@@ -14,6 +14,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
 from sets import Set
+import bleach
 from utils import clear_tmp
 
 from email_sender.models import Shedule
@@ -119,7 +120,7 @@ class TemplateRenderer():
     # работаю с параметрами, которые приходят с сервера, в одном месте
     def requestParameters(self, request_method, files, dir='', path=''):
         template_id = request_method.get('temp_id')
-        subject = request_method.get('subject')
+        subject = bleach.clean(request_method.get('subject'))
         footer = request_method.get('footer')
         social_btn = request_method.get('social_buttons')
 
@@ -127,7 +128,7 @@ class TemplateRenderer():
         header_color = request_method.get('head_background-color')
 
         fixed_bg = request_method.get('fixed_bg')
-        texts = request_method.getlist('text')
+        texts = bleach.clean(request_method.getlist('text'))
         from_email = request_method.get('address')
 
         args = {
