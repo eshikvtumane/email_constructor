@@ -31,6 +31,8 @@ class Email(models.Model):
     from_email = models.CharField(max_length = 255)
     domain_name = models.TextField()
 
+    task_id = models.CharField(max_length=256, blank=True, null=True)
+
 
 # модель для хранения текстов, содержащихся в письме
 class Text(models.Model):
