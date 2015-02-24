@@ -61,8 +61,7 @@ p.callout {
 
 table.social {
 /* 	padding:15px; */
-
-    background-color: #b5b3c2;
+	background-color: #ebebeb;
 	
 }
 .social .soc-btn {
@@ -95,24 +94,11 @@ table.head-wrap {
 .header.container-embeded table td.logo { padding: 15px; }
 .header.container-embeded table td.label { padding: 15px; padding-left:0px;}
 
-    .padding-text{
-        padding-top: 4ex;
-        padding-bottom: 4ex;
-        padding-left: 3ex;
-        padding-right: 3ex;
-    }
-
 
 /* ------------------------------------- 
 		BODY 
 ------------------------------------- */
 table.body-wrap { width: 100%;}
-
-    .content-text{
-        padding-left: 4ex;
-        padding-right: 4ex;
-
-    }
 
 
 /* ------------------------------------- 
@@ -205,7 +191,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	padding:15px;
 	max-width:600px;
 	margin:0 auto;
-	display:block;
+	display:block; 
 }
 
 /* Let's make sure tables in the content area are 100% wide */
@@ -256,24 +242,32 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
  
 <body>
 
-<div id='body_elem'  bgcolor="#b5b3c2" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
+<div id='body_elem'  bgcolor="#FFFFFF" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 <!-- HEADER -->
-<table class="head-wrap" bgcolor="#b5b3c2">
+<table class="head-wrap" bgcolor="#999999">
 	<tr>
 		<td></td>
 		<td class="header container-embeded" align="">
 			
 			<!-- /content -->
 			<div class="content">
-                            <div class="padding-text" align="center">
-                                <div class="file-input-wrapper">
-                                    <button class="btn-file-input" id="btn1">
-                                        <label id='label1'>LOGO</label>
-                                    </button>
-                                    <input type="file" name="image" id='file' accept="image/*" onchange='getImage(this, 1)'/>
-                                </div>
+				<table bgcolor="#999999" >
+					<tr>
+						<td>
+                            <div class="file-input-wrapper">
+                                <button class="btn-file-input" id="btn1">
+                                    <label id='label1'>LOGO</label>
+                                </button>
+                                <input type="file" name="image" id='file' accept="image/*" onchange='getImage(this, 1)'/>
                             </div>
 
+							<!-- <input type='file' name='image'> -->
+						</td>
+						<td align="right">
+								<input type='text' name='text'>
+						</td>
+					</tr>
+				</table>
 			</div><!-- /content -->
 			
 		</td>
@@ -286,18 +280,79 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	<tr>
 		<td></td>
 		<td class="container-embeded" align="" bgcolor="#FFFFFF">
-
+			
+			<!-- content -->
+			<div class="content">
 							
 			<!-- content -->
-			<div class="content" align="center">
-                <div class="content-text">
-                    <div class='text'>
-                        <textarea name='text' rows="30" cols="40"></textarea>
-                    </div>
-                </div>
+			<div class="content">
+				
+				<table bgcolor="">
+					<tr>
+						<td class="small" width="20%" style="vertical-align: top; padding-right:10px;">
+							<div class="file-input-wrapper">
+                                <button class="btn-file-input" id="btn2">
+                                    <label id='label2'>Картинка</label>
+                                </button>
+                                <input type="file" name="image" accept="image/*" onchange='getImage(this, 2)'/>
+                            </div>
+						</td>
+						<td>
+							<textarea name='text'></textarea>
+						</td>
+					</tr>
+				</table>
+			
 			</div><!-- /content -->
 			
-
+			<!-- content -->
+			<div class="content"><table bgcolor="">
+				<tr>
+					<td class="small" width="20%" style="vertical-align: top; padding-right:10px;">
+						<div class="file-input-wrapper">
+                                <button class="btn-file-input" id="btn3">
+                                    <label id='label3'>Картинка</label>
+                                </button>
+                                <input type="file" name="image" accept="image/*" onchange='getImage(this, 3)'/>
+                            </div>
+					</td>
+					<td>
+						<textarea name='text'></textarea>
+					</td>
+				</tr>
+			</table></div><!-- /content -->
+						
+			<div class="content"><table bgcolor="">
+				<tr>
+					<td class="small" width="20%" style="vertical-align: top; padding-right:10px;">
+						<div class="file-input-wrapper">
+                                <button class="btn-file-input" id="btn4">
+                                    <label id='label4'>Картинка</label>
+                                </button>
+                                <input type="file" name="image" accept="image/*" onchange='getImage(this, 4)'/>
+                            </div>
+					</td>
+					<td>
+						<textarea name='text'></textarea>
+					</td>
+				</tr>
+			</table></div><!-- /content -->
+			
+			<div class="content"><table bgcolor="">
+				<tr>
+					<td class="small" width="20%" style="vertical-align: top; padding-right:10px;">
+						<div class="file-input-wrapper">
+                                <button class="btn-file-input" id="btn5">
+                                    <label id='label5'>Картинка</label>
+                                </button>
+                                <input type="file" name="image" accept="image/*" onchange='getImage(this, 5)'/>
+                            </div>
+					</td>
+					<td>
+						<textarea name='text'></textarea>
+					</td>
+				</tr>
+			</table></div><!-- /content -->
 			
 
 		</td>
@@ -306,50 +361,43 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 </table><!-- /BODY -->
 
 <!-- FOOTER -->
-<table class="footer-wrap" bgcolor="#b5b3c2">
+<table class="footer-wrap">
 	<tr>
 		<td></td>
 		<td class="container-embeded">
 			
 				<!-- content -->
-				<div class="content" style="background-color: #b5b3c2;">
+				<div class="content">
 					<!-- social & contact -->
-							<table bgcolor="#b5b3c2" class="social" width="100%">
+							<table bgcolor="" class="social" width="100%">
 								<tr>
 									<td>
 										
 										<!--- column 1 -->
 										<div class="column">
-											<table bgcolor="#b5b3c2" cellpadding="" align="left">
-                                                <tr>
-                                                    <td>
-                                                        <div class='text'>
-                                                            <textarea name='text'>
-
-                                                            </textarea>
-                                                        </div>
-
-
-                                                    </td>
-                                                </tr>
-                                            </table><!-- /column 1 -->
+											<table bgcolor="" cellpadding="" align="left">
+										<tr>
+											<td>				
+												
+												<textarea name='text'>
+													
+												</textarea>
+						
+												
+											</td>
+										</tr>
+									</table><!-- /column 1 -->
 										</div>
 										
 										<!--- column 2 -->
 										<div class="column">
-											<table bgcolor="" cellpadding="#b5b3c2" align="left">
-                                                <tr>
-                                                    <td>
-                                                            <div class="file-input-wrapper">
-                                                                <button class="btn-file-input" id="btn2">
-                                                                    <label id='label2'>LOGO</label>
-                                                                </button>
-                                                                <input type="file" name="image" accept="image/*" onchange='getImage(this, 2)'/>
-                                                            </div>
-
-                                                    </td>
-                                                </tr>
-                                            </table><!-- /column 2 -->
+											<table bgcolor="" cellpadding="" align="left">
+										<tr>
+											<td>
+												<h4>Логотип или социальные кнопки</h4>
+											</td>
+										</tr>
+									</table><!-- /column 2 -->	
 										</div>
 										
 										<div class="clear"></div>
@@ -357,7 +405,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 									</td>
 								</tr>
 							</table><!-- /social & contact -->
-                </div>
+							
 						</td>
 					</tr>
 				</table>
