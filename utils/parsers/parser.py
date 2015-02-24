@@ -18,9 +18,13 @@ class Parser():
             images = soup.findAll("img",{"class":"image"})
             count = 1
             for image in images:
-                new_tag = soup.new_tag("input",type="file")
-                new_tag["name"] = "image"
-                image.replaceWith(new_tag)
+                new_wrapper_tag = soup.new_tag("div")
+                new_wrapper_tag["class"] = "file-input-wrapper"
+                new_button_tag =  soup.new_tag("button")
+                new_input_tag = soup.new_tag("input")
+                new_input_tag["name"] = "image"
+                new_input_tag["class"] = "btn-file-input"
+
                 count += 1
 
             text_fields = soup.findAll("div",{"class":"text"})
@@ -28,6 +32,7 @@ class Parser():
             for text in text_fields:
                 new_tag = soup.new_tag("textarea")
                 new_tag["name"] = "text"
+
                 text.insert(0,new_tag)
                 count += 1
 
