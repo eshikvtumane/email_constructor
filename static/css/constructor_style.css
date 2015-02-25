@@ -24,6 +24,10 @@
     padding-top: 2ex;
 }
 
+.margin-elem{
+    margin-top: 3ex;
+}
+
 select[multiple]{
     height: 30ex;
 }
@@ -113,4 +117,17 @@ select[multiple]{
 
 .bg-panel-align{
     margin-top:20px;
+}
+
+.thumb-style{
+    width: 10%;
+    display:inline-block;
+    margin-right:50px;
+    text-align:center;
+    padding-bottom: 3ex;
+    margin-left: 8ex;
+}
+
+.thumb-style.img{
+    border: 1px solid black;
 }

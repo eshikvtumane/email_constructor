@@ -54,19 +54,18 @@
 
                     <div id='select_templates' style="wigth: 100%">
                         {% for template in templates %}
-                            <div
-                                    style="wigth: 10%;display:inline-block;margin-right:50px;text-align:center">
+                            <div class="thumb-style" align="center">
                                 <div style="width:100%">
                                     <a class="fancybox" rel="group"
-                                       href="/media/{{template.thumbnail}}"><img
-                                            height="100" width="100"
+                                       href="/media/{{template.thumbnail}}">
+                                        <img height="100" width="100"
                                             src="/media/{{template.thumbnail}}"
                                             alt="" /></a>
 
-                                  <br>
-                                    <br>
-                                    <button class="btn btn-primary"
+                                    <div class="padding-elem">
+                                        <button class="btn btn-primary"
                                             onclick="return loadTemplate('{{ template.id }}', '{{ template.html }}');">Выбрать</button>
+                                    </div>
 
 
                                 </div>
