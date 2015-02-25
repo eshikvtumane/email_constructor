@@ -55,18 +55,22 @@
                     <div id='select_templates' style="wigth: 100%">
                         {% for template in templates %}
                             <div
-                                    style="wigth: 10%;display:inline-block;margin-right:50px">
-                                <div>
+                                    style="wigth: 10%;display:inline-block;margin-right:50px;text-align:center">
+                                <div style="width:100%">
                                     <a class="fancybox" rel="group"
                                        href="/media/{{template.thumbnail}}"><img
                                             height="100" width="100"
                                             src="/media/{{template.thumbnail}}"
                                             alt="" /></a>
 
-                                </div>
-                                <br>
+                                  <br>
+                                    <br>
                                     <button class="btn btn-primary"
                                             onclick="return loadTemplate('{{ template.id }}', '{{ template.html }}');">Выбрать</button>
+
+
+                                </div>
+
                                     <!--<a  href="#" onclick="return loadTemplate('{{ template.id }}', '{{ template.html }}');"> {{ template.name }}</a>-->
 
                             </div>

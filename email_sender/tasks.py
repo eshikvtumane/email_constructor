@@ -1,3 +1,4 @@
+#-*- coding: utf8 -*-
 from celery import task
 from celery.task.base import periodic_task
 import datetime

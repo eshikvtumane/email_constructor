@@ -7,6 +7,5 @@ email_constructor/__init__.pyc
 __pycache__
 db.sqlite3
 migrations
-*.jpg
-*.png
+media/html_templates
 
