@@ -54,6 +54,7 @@ class Template(models.Model):
     name = models.CharField(max_length=200)
     html = models.FileField(upload_to='html_templates')
     template = models.FileField(upload_to='html_templates')
+    thumbnail = models.FileField(upload_to="thumbnails")
 
     def __unicode__(self):
         return self.name

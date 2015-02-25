@@ -3,7 +3,7 @@ from models import Template, Location, Company, CompanyGroup, Email, Image, Soci
 
 # Register your models here.
 class TemplateAdmin(admin.ModelAdmin):
-    fields = ['name', 'html', 'template']
+    fields = ['name', 'html', 'template','thumbnail']
 
 
 class TextInline(admin.StackedInline):

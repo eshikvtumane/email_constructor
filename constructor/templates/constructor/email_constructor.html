@@ -58,12 +58,16 @@
                                     style="wigth: 10%;display:inline-block;margin-right:50px">
                                 <div>
                                     <a class="fancybox" rel="group"
-                                       href="/media/newsletter.jpg"><img
+                                       href="/media/{{template.thumbnail}}"><img
                                             height="100" width="100"
-                                            src="/media/newsletter.jpg" alt="" /></a>
+                                            src="/media/{{template.thumbnail}}"
+                                            alt="" /></a>
 
                                 </div>
-                                    <a  href="#" onclick="return loadTemplate('{{ template.id }}', '{{ template.html }}');"> {{ template.name }}</a>
+                                <br>
+                                    <button class="btn btn-primary"
+                                            onclick="return loadTemplate('{{ template.id }}', '{{ template.html }}');">Выбрать</button>
+                                    <!--<a  href="#" onclick="return loadTemplate('{{ template.id }}', '{{ template.html }}');"> {{ template.name }}</a>-->
 
                             </div>
                         {% endfor %}

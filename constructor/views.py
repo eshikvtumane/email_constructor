@@ -32,7 +32,10 @@ class ConstructorEmailView(View):
         args['companies'] = models.Company.objects.all()
         args['locations'] = models.Location.objects.all()
         # получаем путь до шаблонов
-        args['templates'] = models.Template.objects.all().values('name', 'id', 'html')
+        args['templates'] = models.Template.objects.all().values('name',
+                                                                 'id',
+                                                                 'html',
+                                                                 'thumbnail')
         return render_to_response(self.template, RequestContext(request, args))
 
 
@@ -120,7 +123,7 @@ class TemplateRenderer():
     # работаю с параметрами, которые приходят с сервера, в одном месте
     def requestParameters(self, request_method, files, dir='', path=''):
         template_id = request_method.get('temp_id')
-        subject = bleach.clean(request_method.get('subject'))
+        subject = request_method.get('subject')
         footer = request_method.get('footer')
         social_btn = request_method.get('social_buttons')
 
@@ -128,7 +131,7 @@ class TemplateRenderer():
         header_color = request_method.get('head_background-color')
 
         fixed_bg = request_method.get('fixed_bg')
-        texts = bleach.clean(request_method.getlist('text'))
+        texts = request_method.getlist('text')
         from_email = request_method.get('address')
 
         args = {
