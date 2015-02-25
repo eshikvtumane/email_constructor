@@ -120,7 +120,7 @@ class TemplateRenderer():
     # работаю с параметрами, которые приходят с сервера, в одном месте
     def requestParameters(self, request_method, files, dir='', path=''):
         template_id = request_method.get('temp_id')
-        subject = bleach.clean(request_method.get('subject'))
+        subject = request_method.get('subject')
         footer = request_method.get('footer')
         social_btn = request_method.get('social_buttons')
 
@@ -128,7 +128,7 @@ class TemplateRenderer():
         header_color = request_method.get('head_background-color')
 
         fixed_bg = request_method.get('fixed_bg')
-        texts = bleach.clean(request_method.getlist('text'))
+        texts = request_method.getlist('text')
         from_email = request_method.get('address')
 
         args = {
@@ -222,15 +222,23 @@ class SaveTemplateView(View):
 
         # переводим дату и время из строки в объект
             str_datetime = request.POST.get('datetime')
-            datetime_format = datetime.datetime.strptime(str_datetime, '%Y-%m-%d %H:%M')
+            sheduled_date = datetime.datetime.strptime(str_datetime, '%Y-%m-%d %H:%M')
 
+# добавление времени отправки к параметрам
+            param['sheduled_time'] = str_datetime
 
+            # получение объекта шаблона
             param['email_template'] = models.Template.objects.get(pk=param['email_template'])
+
+            # сохранение параметров письма
             email_obj = models.Email.objects.create(**param)
 
-            print request.POST
+
             # добавление текста из шаблона
             text_objs = [models.Text(email= email_obj, text = text) for text in texts]
+
+
+            # сохранение текста из шаблона
             models.Text.objects.bulk_create(text_objs)
 
     # добавление местопложения, групп пользователей и компаний
@@ -261,8 +269,8 @@ class SaveTemplateView(View):
 
             return HttpResponse('200', 'text/plain')
 
-        except:
-            return HttpResponse('500', 'text/plain')
+        except Exception as e:
+            return HttpResponse('500 ' + e.message, 'text/plain')
 
 
 
