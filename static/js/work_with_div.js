@@ -9,16 +9,9 @@ $(document).ready(function(){
 
     $('#btn_next').click(function(){
     // проверка: существуют ли данные элементы
-     /*   load_template_div = document.getElementById('template');
-        console.log('-----------')
-        console.log(type(load_template_div.innerHTML))
-        if(load_template_div.innerHTML == null){
-            document.getElementById('errors').innerHTML = 'Выберите шаблон письма';
-            return;
-        }
-*/
+
         // проверка на пустые значения
-        error_arr = inputsValidate();
+        error_arr = inputsValidate('subject','temp_id');
         len = error_arr.length
 
         //var len = 0
@@ -48,24 +41,19 @@ $(document).ready(function(){
 });
 
 // проверка значений на пустые значения
-function inputsValidate(subject, title, text, footer, input_image_name){
+function inputsValidate(subject, template){
     error_arr = new Array();
 
-    /*if(subject == ''){
+    if(document.getElementById(template).value == ''){
+        error_arr.push('Выберите шаблон');
+    }
+
+    if(document.getElementById(subject).value == ''){
         error_arr.push('Введите тему письма');
     }
-    if(title == ''){
-        error_arr.push('Введите заголовок в шаблоне');
-    }
-    if(text == ''){
-        error_arr.push('Введите текст письма в шаблоне');
-    }
-    if(footer == ''){
-        error_arr.push('Заполните футер');
-    }*/
 
 // валидация изображение
-    image_count = 0;
+    /*image_count = 0;
     quantity_count = 0;
     var image_inputs = document.getElementsByName('image');
         inputs_len = image_inputs.length;
@@ -81,6 +69,6 @@ function inputsValidate(subject, title, text, footer, input_image_name){
     // если количество инпутов равен количеству загруженных изображений
     if(image_count != quantity_count){
         error_arr.push('Добавлены не все картинки');
-    }
+    }*/
     return error_arr
 }

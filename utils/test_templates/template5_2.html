@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Шаблон2</title>
+<title>ZURBemails</title>
 	
 <style type="text/css">
-	* ------------------------------------- 
+	/* ------------------------------------- 
 		GLOBAL 
 ------------------------------------- */
 * { 
@@ -17,9 +17,16 @@
 }
 * { font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; }
 
-img { 
-	max-width: 100%; 
+img {
+    width: 20ex;
+
 }
+.img_logo{
+    height: 80px;
+    width: 180px;
+    }
+
+
 .collapse {
 	margin:0;
 	padding:0;
@@ -29,6 +36,16 @@ body {
 	-webkit-text-size-adjust:none; 
 	width: 100%!important; 
 	height: 100%;
+
+    {% if bg_img %}
+
+         background-image: url('{{ bg_img }}');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: cover;
+    {% else %}
+        background-color: #{{ bg_color }};
+    {% endif %}
 }
 
 
@@ -61,7 +78,11 @@ p.callout {
 
 table.social {
 /* 	padding:15px; */
-	background-color: #ebebeb;
+    {% if footer %}
+	    background-color: #{{ footer }};
+    {% else %}
+        background-color: #ebebeb;
+    {% endif %}
 	
 }
 .social .soc-btn {
@@ -86,12 +107,28 @@ a.ms { background-color: #000!important; }
 /* ------------------------------------- 
 		HEADER 
 ------------------------------------- */
-table.head-wrap { width: 100%;}
+    .header{
 
-.header.container-embeded table td.logo { padding: 15px; }
-.header.container-embeded table td.label { padding: 15px; padding-left:0px;}
+        {% if header_img %}
+            background-image: url({{ header_img }});
+        {% else %}
+            background-color: #{{ header_color }};
+        {% endif %}
+    }
+table.head-wrap {
+    width: 100%;
 
-#content_header{text-align: center;}	
+
+
+    table.social {
+/* 	padding:15px; */
+
+
+    }
+
+.header.container table td.logo { padding: 15px; }
+.header.container table td.label { padding: 15px; padding-left:0px;}
+
 
 /* ------------------------------------- 
 		BODY 
@@ -103,14 +140,22 @@ table.body-wrap { width: 100%;}
 		FOOTER 
 ------------------------------------- */
 table.footer-wrap { width: 100%;	clear:both!important;
+
 }
-.footer-wrap .container-embeded td.content  p { border-top: 1px solid rgb(215,215,215); padding-top:15px;}
-.footer-wrap .container-embeded td.content p {
+.footer-wrap .container td.content  p { border-top: 1px solid rgb(215,215,215); padding-top:15px;}
+.footer-wrap .container td.content p {
 	font-size:10px;
 	font-weight: bold;
 	
 }
 
+#footer {
+   clear: both;
+    position: relative;
+    z-index: 10;
+    height: 3em;
+    margin-top: -3em;
+}
 
 /* ------------------------------------- 
 		TYPOGRAPHY 
@@ -176,14 +221,14 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 ------------------------------------------------------ */
 
 /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
-.container-embeded-embeded {
+.container {
 	display:block!important;
 	max-width:600px!important;
 	margin:0 auto!important; /* makes it centered */
 	clear:both!important;
 }
 
-/* This should also be a block element, so that it will fill 100% of the .container-embeded */
+/* This should also be a block element, so that it will fill 100% of the .container */
 .content {
 	padding:15px;
 	max-width:600px;
@@ -233,123 +278,76 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	}
 
 }
+.wrap{
+    word-wrap: break-word;
+    width: 40ex;
+    }
+
+    .image_header{
 
 
-.image
-{
-	
-	height: 80%;
-	width: 160px;
-	border-radius: 100px;
-    display: inline-block;
-    margin-left: 2px;
-    margin-right: 2px;
-    position: relative;
-    top: 15%;
-    background-image: url('chups.jpeg');
-    background-size: cover;
-    -moz-box-sizing:    border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing:        border-box;
-}
-	
+    }
 </style>
 
 </head>
  
-<body bgcolor="#FFFFFF" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
-
+<div id='body_elem' topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 <!-- HEADER -->
-<table class="head-wrap" bgcolor="#999999">
-	<tr>
-		<td></td>
-		<td class="header container-embeded" align="">
-			
-			<!-- /content -->
-			
-				<div class="content" id="content_header">
-					
-					<div><input type="file" name="image"></div>
-				
-				</div>
-			<!-- /content -->
-			
-		</td>
-		<td></td>
-	</tr>
-</table><!-- /HEADER -->
+<div class="header" style='width: 100%; height: 150px; margin-bottom: 6ex;' align='center'>
+	<div style='width: 70%; height: 150px;'>
+		<div class='text' style="width: 30%; float: left; display: inline-block; word-wrap: break-word; padding: 2ex 2ex 2ex 2ex">
+		    {{ text1|safe }}
+		</div>
+
+		<div style='margin-left: 2ex; display: inline-block; width: 500px; height: 150px;
+		    background-image: url({{ image1 }}); ; border: 1px solid black'>
+		</div>
+	</div>
+	
+</div>
+<!-- /HEADER -->
 
 <!-- BODY -->
-<table class="body-wrap" bgcolor="">
-	<tr>
-		<td></td>
-		<td class="container-embeded" align="" bgcolor="#FFFFFF">
-			
-			<!-- content -->
-			<div class="content" align="">
-				<table>
-					<tr>
-						<td>
-							
-							<p style="text-align:center"><textarea name="text"></textarea></p>
-						</td>
-					</tr>
-				</table>
-			</div><!-- /content -->
-			
-			<!-- content -->
-			<div class="content" style="">
-			
-							<input type="file" name="image" size="10">
-							<input type="file" name="image">
-							<input type="file" name="image">
-																								
-			</div><!-- /content -->
-			
 
-				<!-- content -->
-			<div class="content" align="">
-				<table>
-					<tr>
-						<td>
-							
-							<p style="text-align:center" ><textarea name="text"></textarea> </p>
-						</td>
-					</tr>
-				</table>
-			</div><!-- /content -->
-			
-			<hr>
-			
+    <!-- content -->
+    <div class="content" style='width: 100%;margin-top: 6ex; margin-bottom: 6ex;' align="center">
+        <div class="content-text" style='width: 60%; background-color: #FFFFFF;' align="center">
+            <div class='text' style="padding: 4ex 4ex 4ex 4ex;">
+                {{ text2|safe }}
+            </div>
 
-		</td>
-		<td></td>
-	</tr>
-</table><!-- /BODY -->
+            <div style='padding-top: 4ex; padding-bottom: 4ex;'>
+                <img src="{{ image2 }}" style=" width: 40%;">
+            </div>
+
+        </div>
+
+
+    </div><!-- /content -->
+    <!-- /BODY -->
 
 <!-- FOOTER -->
-<table class="footer-wrap">
-	<tr>
-		<td></td>
-		<td class="container-embeded">
-			
-				<!-- content -->
-				<div class="content">
-					<table>
-						<tr>
-							<td align="center">
-								<p style="text-align:center">
-									<textarea  name="text"></textarea>
-								</p>
-							</td>
-						</tr>
-					</table>
-				</div><!-- /content -->
-				
-		</td>
-		<td></td>
-	</tr>
-</table><!-- /FOOTER -->
+<div id='footer' style="background-color: #{{ footer }}; width: 100%;" align="center">
+    <div style="width: 40%; display: inline-block; padding-top: 3ex; padding-bottom: 3ex;">
+        <div style="width: 40%; float: left;">
+            <div class="text">
+                {{ text3|safe }}
+            </div>
+        </div>
 
+        <div style="width: 40%; display: inline-block;">
+            {% for s in social_buttons %}
+                <a target="_blank" href="{{ s.link }}"><img src="{{ s.icon }}" style='width: 48px;'></a>
+            {% empty %}
+                <img src='{{ image3 }}'  class="img_logo">
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<!-- /FOOTER -->
+ <!-- /FOOTER -->
+</div>
 </body>
 </html>

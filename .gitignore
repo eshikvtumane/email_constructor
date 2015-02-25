@@ -8,4 +8,7 @@ __pycache__
 db.sqlite3
 migrations
 media/html_templates
+email_images
+html_templates
+tmp
 

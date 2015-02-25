@@ -245,6 +245,12 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
     margin-left: 2px;
     margin-right: 2px;
     position: relative;
+
+
+
+
+
+
     top: 15%;
     background-image: url('chups.jpeg');
     background-size: cover;
@@ -269,7 +275,12 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 			
 				<div class="content" id="content_header">
 					
-					<div><input type="file" name="image"></div>
+					<div class="file-input-wrapper">
+                        <button class="btn-file-input" id="btn1">
+                            <label id='label1'>Картинка</label>
+                        </button>
+                        <input type="file" name="image" accept="image/*" onchange='getImage(this, 1)'/>
+                    </div>
 				
 				</div>
 			<!-- /content -->
@@ -299,10 +310,32 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 			
 			<!-- content -->
 			<div class="content" style="">
-			
-							<input type="file" name="image" size="10">
-							<input type="file" name="image">
-							<input type="file" name="image">
+			    <div>
+                    <div class="file-input-wrapper">
+                        <button class="btn-file-input" id="btn2">
+                            <label id='label2'>Картинка</label>
+                        </button>
+                        <input type="file" name="image" accept="image/*" onchange='getImage(this, 2)'/>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="file-input-wrapper">
+                        <button class="btn-file-input" id="btn3">
+                            <label id='label3'>Картинка</label>
+                        </button>
+                        <input type="file" name="image" accept="image/*" onchange='getImage(this, 3)'/>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="file-input-wrapper">
+                        <button class="btn-file-input" id="btn4">
+                            <label id='label4'>Картинка</label>
+                        </button>
+                        <input type="file" name="image" accept="image/*" onchange='getImage(this, 4)'/>
+                    </div>
+                </div>
 																								
 			</div><!-- /content -->
 			

@@ -28,6 +28,8 @@ class Email(models.Model):
 
     users = models.ManyToManyField('Company', blank=True, null=True)
 
+
+    sheduled_time = models.DateTimeField(blank=True)
     from_email = models.CharField(max_length = 255)
     domain_name = models.TextField()
 

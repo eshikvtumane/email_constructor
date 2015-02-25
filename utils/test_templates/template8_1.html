@@ -245,6 +245,12 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
     margin-left: 2px;
     margin-right: 2px;
     position: relative;
+
+
+
+
+
+
     top: 15%;
     background-image: url('chups.jpeg');
     background-size: cover;
@@ -269,7 +275,12 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 			
 				<div class="content" id="content_header">
 					
-					<div><input type="file" name="image"></div>
+					<div class="file-input-wrapper">
+                        <button class="btn-file-input" id="btn1">
+                            <label id='label1'>Картинка</label>
+                        </button>
+                        <input type="file" name="image" accept="image/*" onchange='getImage(this, 1)'/>
+                    </div>
 				
 				</div>
 			<!-- /content -->
@@ -286,37 +297,48 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 		<td class="container-embeded" align="" bgcolor="#FFFFFF">
 			
 			<!-- content -->
-			<div class="content" align="">
-				<table>
-					<tr>
-						<td>
-							
-							<p style="text-align:center"><textarea name="text"></textarea></p>
-						</td>
-					</tr>
-				</table>
+			<div class="content"  align="center">
+				<textarea name="text"></textarea></p>
+						
 			</div><!-- /content -->
 			
 			<!-- content -->
-			<div class="content" style="">
-			
-							<input type="file" name="image" size="10">
-							<input type="file" name="image">
-							<input type="file" name="image">
+			<div class="content" style="width: 100%;" align="center">
+			    <div style="width: 20%; display: inline-block; ">
+                    <div class="file-input-wrapper">
+                        <button class="btn-file-input" id="btn2">
+                            <label id='label2'>IMG</label>
+                        </button>
+                        <input type="file" name="image" accept="image/*" onchange='getImage(this, 2)'/>
+                    </div>
+                </div>
+
+                <div style="width: 20%; display: inline-block; ">
+                    <div class="file-input-wrapper">
+                        <button class="btn-file-input" id="btn3">
+                            <label id='label3'>IMG</label>
+                        </button>
+                        <input type="file" name="image" accept="image/*" onchange='getImage(this, 3)'/>
+                    </div>
+                </div>
+
+                <div style="width: 20%; display: inline-block; ">
+                    <div class="file-input-wrapper">
+                        <button class="btn-file-input" id="btn4">
+                            <label id='label4'>IMG</label>
+                        </button>
+                        <input type="file" name="image" accept="image/*" onchange='getImage(this, 4)'/>
+                    </div>
+                </div>
 																								
 			</div><!-- /content -->
 			
 
 				<!-- content -->
-			<div class="content" align="">
-				<table>
-					<tr>
-						<td>
-							
-							<p style="text-align:center" ><textarea name="text"></textarea> </p>
-						</td>
-					</tr>
-				</table>
+			<div class="content"  align="center">
+
+							<textarea name="text"></textarea>
+
 			</div><!-- /content -->
 			
 			<hr>
