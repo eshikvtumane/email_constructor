@@ -9,6 +9,7 @@ function loadTemplate(template_id, template_path){
            nicEditors.allTextAreas( );
     }
 
+    document.getElementById('template').innerHTML = '<img src="/media/loader.GIF">';
     ajaxSend(
         'GET',
         '/constructor/template_load/' + template_id,
@@ -22,6 +23,7 @@ function loadTemplate(template_id, template_path){
 
 
 function ajaxSend(method_type, template_url, data, function_success){
+
     $.ajax({
         type: method_type,
         url: template_url,
