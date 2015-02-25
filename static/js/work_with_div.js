@@ -18,6 +18,7 @@ $(document).ready(function(){
         // если ошибок нет
         if(len == 0){
         // переход на следующий блок
+            document.getElementById('errors').innerHTML = '';
             $('#email').hide();
             $('#setting').show();
         }
