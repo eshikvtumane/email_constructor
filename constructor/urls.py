@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 
 from views import ConstructorEmailView, SearchUserAjax
 
-from views import ConstructorEmailView,FirstTemplateView,TemplateRenderPreview, TemplateLoadAjax, SaveTemplateView
+from views import ConstructorEmailView,TemplateRenderPreview, TemplateLoadAjax, SaveTemplateView
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings

@@ -60,13 +60,6 @@ class TemplateLoadAjax(View):
         return HttpResponse(lines)
 
 
-class FirstTemplateView(View):
-    template = 'template_1.html'
-    def get(self, request):
-        args = {}
-
-        return render_to_response(self.template, RequestContext(request, args))
-
 # генерирование шаблона для предварительного шаблона
 class TemplateRenderPreview(View):
     def post(self, request):
@@ -173,7 +166,7 @@ class TemplateRenderer():
     '''
     -----------------------------------------------------------------
         generateTemplate
-    ----------------------------------------------------------------------
+    -----------------------------------------------------------------
     '''
     def generateTemplate(self, param, texts, imgs):
         t = models.Template.objects.all().get(id=param['email_template']).template
@@ -239,7 +232,6 @@ class SaveTemplateView(View):
 
             # добавление текста из шаблона
             text_objs = [models.Text(email= email_obj, text = text) for text in texts]
-
 
             # сохранение текста из шаблона
             models.Text.objects.bulk_create(text_objs)
@@ -335,7 +327,6 @@ class DatabaseGenerateTemplate(TemplateRenderer):
         if(bg_img):
             bg_img = os.path.join(email_obj.domain_name, 'media', bg_img)
             args['bg_img'] = bg_img
-            print args['bg_img']
 
         if(bg_color):
             args['bg_color'] = bg_color
