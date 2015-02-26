@@ -6,7 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from constructor.models import Email, Template, Image, Text
 from django.http import HttpResponse
-from constructor.views import DatabaseGenerateTemplate
+from constructor.tempate_generator import DatabaseGenerateTemplate
 
 
 

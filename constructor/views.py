@@ -220,8 +220,8 @@ class SaveTemplateView(View):
             str_datetime = request.POST.get('datetime')
             sheduled_date = datetime.datetime.strptime(str_datetime, '%Y-%m-%d %H:%M')
 
-# добавление времени отправки к параметрам
-            param['sheduled_time'] = str_datetime
+    # добавление времени отправки к параметрам
+            param['sheduled_time'] = sheduled_date
 
             # получение объекта шаблона
             param['email_template'] = models.Template.objects.get(pk=param['email_template'])
@@ -258,14 +258,13 @@ class SaveTemplateView(View):
 
             models.Image.objects.bulk_create(images_list)
 
-    # добавление задачи в расписание
-            #sh = Shedule(email = email_obj, datetime = datetime_format)
-            #sh.save()
+        # добавление задачи в расписание
+                #sh = Shedule(email = email_obj, datetime = datetime_format)
+                #sh.save()
 
             return HttpResponse('200', 'text/plain')
 
         except Exception as e:
             return HttpResponse('500 ' + e.message, 'text/plain')
-
 
 

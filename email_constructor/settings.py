@@ -77,8 +77,11 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Vladivostok'
-CELERY_TIMEZONE = 'Asia/Vladivostok'
+TIME_ZONE = 'Etc/GMT-10'
+
+CELERY_ENABLE_UTC = False
+#TIME_ZONE = 'Asia/Vladivostok'
+CELERY_TIMEZONE = 'Etc/GMT0'
 
 USE_I18N = True
 
@@ -101,3 +104,8 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'eshikvtumanebest@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

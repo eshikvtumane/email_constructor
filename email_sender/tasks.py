@@ -2,7 +2,7 @@
 from celery import task
 from celery.task.base import periodic_task
 import datetime
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from celery.utils.log import get_task_logger
 from celery.schedules import crontab
 from constructor.tempate_generator import DatabaseGenerateTemplate
@@ -20,10 +20,15 @@ logger = get_task_logger(__name__)
 
 
 @task
-def send_email(email_id):
+def send_email(*args, **kwargs):
     # получение объкта выбранного письма
+    email_id = args[0]
     dgt = DatabaseGenerateTemplate(email_id)
     email_template = dgt.databaseTemplate()
     email_list, subject, from_email = dgt.getEmailParameters()
-    send_email(subject,email_template,from_email,email_list,fail_silently=False)
+    print email_list, subject, from_email
+
+    #msg = EmailMultiAlternatives('fff', 'ddd', 'df@df.rt', email_list)
+    #msg.send()
+    #send_email('fff','ggg',from_email,['eshikvtumane@mail.ru'])
 

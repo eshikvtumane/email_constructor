@@ -152,10 +152,11 @@ def email_handler(*args, **kwargs):
     #
     #     instance.task_id = result.task_id
 
-    result = tasks.send_email.apply_async(eta=instance.sheduled_time,
-                                          email_id=instance.pk)
+    id = instance.pk
+    result = tasks.send_email.apply_async((id,), eta=instance.sheduled_time)
     print "Task id"
     print result.task_id
+    #print result.stat
     instance.task_id = result.task_id
 
 post_save.connect(email_handler, sender=Email)
