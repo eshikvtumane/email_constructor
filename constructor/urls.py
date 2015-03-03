@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'email_constructor.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^email_templates/$', ConstructorEmailView.as_view(), name='email_templates'),
+    url(r'^$', ConstructorEmailView.as_view(), name='email_templates'),
 
 # поиск пользователей
     url(r'^search_users/$', SearchUserAjax.as_view()),

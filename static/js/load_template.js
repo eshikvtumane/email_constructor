@@ -12,7 +12,7 @@ function loadTemplate(template_id, template_path){
     document.getElementById('template').innerHTML = '<img src="/media/loader.GIF">';
     ajaxSend(
         'GET',
-        '/constructor/template_load/' + template_id,
+        '/template_load/' + template_id,
         { },
         function_load
     );

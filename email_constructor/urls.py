@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'email_constructor.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^constructor/', include('constructor.urls')),
+    url(r'^', include('constructor.urls')),
     url(r'^email_send/', include('email_sender.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

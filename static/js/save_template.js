@@ -81,7 +81,7 @@ function templateSave(){
 
     $.ajax({
         type:'POST',
-        url:'/constructor/save_template/',
+        url:'/save_template/',
         data: form_data,
         processData: false,
         contentType: false,

@@ -37,6 +37,11 @@ class Email(models.Model):
     task_id = models.CharField(max_length=256, blank=True, null=True)
 
 
+    def __unicode__(self):
+        return self.subject
+
+
+
 # модель для хранения текстов, содержащихся в письме
 class Text(models.Model):
     class Meta:
