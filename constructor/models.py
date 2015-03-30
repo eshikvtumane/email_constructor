@@ -127,41 +127,41 @@ class Social(models.Model):
 
 
 #######SIGNALS##############
-from django.db.models.signals import pre_save
-from django.db.models.signals import post_save
-import celery
-from email_sender import tasks
-
-
-def email_handler(*args, **kwargs):
-    instance = kwargs.get('instance')
-    send_email = False
-    print '='*40
-    print instance.pk
-    print '='*40
-    # try:
-    #     obj = Email.objects.get(pk=instance.pk)
-    #     if obj.sheduled_time != instance.sheduled_time:
-    #         send_email = True
-    # except Email.DoesNotExist:
-    #     obj = instance
-    #     send_email = True
-    #
-    # if send_email:
-    #     if obj.task_id:
-    #         # Если задача уже в shedule, то удаляем её оттуда
-    #         celery.task.control.revoke(obj.task_id)
-    #
-    #     result = tasks.send_email.apply_async(eta=instance.sheduled_time, kwargs={
-    #         'email_id':instance.pk})
-    #
-    #     instance.task_id = result.task_id
-
-    id = instance.pk
-    result = tasks.send_email.apply_async((id,), eta=instance.sheduled_time)
-    print "Task id"
-    print result.task_id
-    #print result.stat
-    instance.task_id = result.task_id
-
-post_save.connect(email_handler, sender=Email)
+# from django.db.models.signals import pre_save
+# from django.db.models.signals import post_save
+# import celery
+# from email_sender import tasks
+#
+#
+# def email_handler(*args, **kwargs):
+#     instance = kwargs.get('instance')
+#     send_email = False
+#     print '='*40
+#     print instance.pk
+#     print '='*40
+#     # try:
+#     #     obj = Email.objects.get(pk=instance.pk)
+#     #     if obj.sheduled_time != instance.sheduled_time:
+#     #         send_email = True
+#     # except Email.DoesNotExist:
+#     #     obj = instance
+#     #     send_email = True
+#     #
+#     # if send_email:
+#     #     if obj.task_id:
+#     #         # Если задача уже в shedule, то удаляем её оттуда
+#     #         celery.task.control.revoke(obj.task_id)
+#     #
+#     #     result = tasks.send_email.apply_async(eta=instance.sheduled_time, kwargs={
+#     #         'email_id':instance.pk})
+#     #
+#     #     instance.task_id = result.task_id
+#
+#     id = instance.pk
+#     result = tasks.send_email.apply_async((id,), eta=instance.sheduled_time)
+#     print "Task id"
+#     print result.task_id
+#     #print result.stat
+#     instance.task_id = result.task_id
+#
+# post_save.connect(email_handler, sender=Email)

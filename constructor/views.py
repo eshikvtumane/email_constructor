@@ -78,7 +78,6 @@ class TemplateRenderer():
     -----------------------------------------------------------'''
     def __init__(self, request, dir=''):
          self.url = 'http://' + get_current_site(request).domain + dir
-         print  self.url
 
 
     def websiteParameters(self, request, dir, imgs_name):
@@ -216,11 +215,11 @@ class SaveTemplateView(View):
             groups = json.loads(request.POST.get('groups'))
             users = json.loads(request.POST.get('users'))
 
-        # переводим дату и время из строки в объект
+             # переводим дату и время из строки в объект
             str_datetime = request.POST.get('datetime')
             sheduled_date = datetime.datetime.strptime(str_datetime, '%Y-%m-%d %H:%M')
 
-    # добавление времени отправки к параметрам
+            # добавление времени отправки к параметрам
             param['sheduled_time'] = sheduled_date
 
             # получение объекта шаблона
@@ -236,7 +235,7 @@ class SaveTemplateView(View):
             # сохранение текста из шаблона
             models.Text.objects.bulk_create(text_objs)
 
-    # добавление местопложения, групп пользователей и компаний
+            # добавление местопложения, групп пользователей и компаний
             usr_locations = models.Company.objects.filter(location__in = locations)
             usr_groups = models.Company.objects.filter(group__in = groups)
             users_obj = models.Company.objects.filter(id__in=users)
@@ -252,17 +251,15 @@ class SaveTemplateView(View):
             email_obj.save()
 
 
-    # добавление картинки
+            # добавление картинки
             images_path = tr.savingImg(request.FILES.getlist('images'), 'email_images')
             images_list = [models.Image(email = email_obj, picture = path) for path in images_path]
 
             models.Image.objects.bulk_create(images_list)
-
-        # добавление задачи в расписание
-                #sh = Shedule(email = email_obj, datetime = datetime_format)
-                #sh.save()
-
-            return HttpResponse('200', 'text/plain')
+            response = []
+            response.append({"status":"200","email_id":email_obj.id})
+            response = json.dumps(response)
+            return HttpResponse(response,content_type='application/json')
 
         except Exception as e:
             return HttpResponse('500 ' + e.message, 'text/plain')

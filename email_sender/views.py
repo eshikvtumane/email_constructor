@@ -12,15 +12,12 @@ from constructor.tempate_generator import DatabaseGenerateTemplate
 
 # Create your views here.
 
-def email_send(request, email_id):
-
-    id = email_id
+def send_email(request, email_id):
+    email_id = int(email_id)
     # получение объкта выбранного письма
-    dgt = DatabaseGenerateTemplate(id)
+    dgt = DatabaseGenerateTemplate(email_id)
     email_template = dgt.databaseTemplate()
     email_list, subject, from_email = dgt.getEmailParameters()
-
-    print email_list, subject, from_email
-
-    return HttpResponse(email_template)
+    #send(subject,from_email,email_template,email_list)
+    return HttpResponse('200',content_type='text/plain')
 

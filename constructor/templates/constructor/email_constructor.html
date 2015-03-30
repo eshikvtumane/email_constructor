@@ -11,7 +11,6 @@
  {% endblock %}
 
 {% block scripts %}
-    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <!-- datetimepicker -->
     <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker.js' %}"></script>
      <!-- text editors -->
@@ -37,9 +36,7 @@
     <script src="{% static 'js/work_with_user.js' %}"></script>
     <script src="{% static 'js/work_with_select.js' %}"></script>
     <script src="{% static 'js/work_with_location.js' %}"></script>
-    <script src="{% static 'js/save_template.js' %}"></script>
-    <script src="{% static 'js/load_template.js' %}"></script>
-    <script src="{% static 'js/page_templates_init.js' %}"></script>
+    <script src="{% static 'js/work_with_template.js' %}"></script>
    <script src="{% static 'js/fancy_box/source/jquery.fancybox.pack.js' %}"></script>
    <script src="{% static 'js/fancy_box/source/helpers/jquery.fancybox-thumbs.js' %}"></script>
 
@@ -324,7 +321,9 @@
 
                         </div>
 
-                    <div id="navigation text-center padding-elem" align="center">
+                    <div id="action_buttons"
+                         class="navigation text-center padding-elem"
+                         align="center">
                         <input type='button' value='Назад' class="btn btn-primary" id="btn_back" class="btn btn-primary">
                         <input type='button' value='Создать письмо' class="btn btn-primary" onclick="templateSave();" class="btn btn-primary">
                     </div>
